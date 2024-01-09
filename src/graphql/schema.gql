@@ -1,6 +1,7 @@
 
 type Query{
     hello:String
+    getToken(email:String!): String
 }
 
 

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UserModel = require('../../../models/userSchema')
 
-module.exports = async (parent, args, data) => {
+module.exports = async (parent, args, token) => {
     const decodedToken = jwt.decode(args.idToken);
     if (!decodedToken) throw new Error('Failed to login google');
     const currentDate = new Date();
