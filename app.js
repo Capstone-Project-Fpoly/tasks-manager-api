@@ -3,9 +3,10 @@ require('dotenv').config();
 const server = require('./src/graphql/sever');
 const path = require('path'); 
 const port = process.env.PORT || 3000;
-
+const mongoose = require('mongoose');
 const startSever = async () => {
     await server.start();
+    await mongoose.connect(process.env.MONGODB_URI);
     const app = express();
     app.use(express.static(path.join(__dirname, 'public')));
     app.get("/", (req, res) => {
