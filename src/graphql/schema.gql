@@ -1,9 +1,17 @@
 
 type Query{
-    hello:String
     getToken(email:String!): String
+    me:User
 }
 
+type User{
+    uid: String!,
+    avatar: String,
+    createdAt: String,
+    updatedAt: String,
+    email: String,
+    fullName: String,
+}
 
 type Mutation{
     loginByGoogle(idToken: String!): String
