@@ -15,4 +15,9 @@ type User{
 
 type Mutation{
     loginByGoogle(idToken: String!): String
+    testCallSubscription: String
+}
+
+type Subscription{
+    test: String,
 }
