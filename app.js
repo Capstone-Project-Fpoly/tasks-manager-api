@@ -25,9 +25,6 @@ const startServer = async () => {
 
     const server = new ApolloServer({
         schema,
-        playground: {
-            subscriptionEndpoint: 'ws://splendid-slug-kit.cyclic.app/graphql'
-        },
         plugins: [
             ApolloServerPluginLandingPageGraphQLPlayground(),
             {
