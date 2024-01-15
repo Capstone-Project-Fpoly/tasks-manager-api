@@ -41,4 +41,4 @@
 
 ```bash
 npm install
-npm run sever
+npm run server
