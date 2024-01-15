@@ -7,6 +7,4 @@ const auth = async (token) => {
     const user = await UserModel.findOne({ uid });
     return user;
 }
-
-
 module.exports = auth;
