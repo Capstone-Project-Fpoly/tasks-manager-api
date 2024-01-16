@@ -2,7 +2,7 @@
 
 ## Quy Tắc Viết Code
 
-### 1. Tuân Thủ Quy Ước Về Tên
+### 1. Tuân Thủ Quy Ước Về Tên 
 
 - **Biến và Hàm:** Sử dụng camelCase cho biến và hàm (ví dụ: `myVariable`, `calculateTotal()`).
 - **Lớp và Đối Tượng:** Sử dụng PascalCase cho tên lớp và đối tượng (ví dụ: `MyClass`, `MyObject`).
