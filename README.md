@@ -8,7 +8,6 @@
 - **Lớp và Đối Tượng:** Sử dụng PascalCase cho tên lớp và đối tượng (ví dụ: `MyClass`, `MyObject`).
 
 ### 2. Tổ Chức Mã Nguồn
---
 
 - **Tổ Chức Thư Mục:** Tổ chức thư mục một cách có tổ chức và dễ đọc.
 - **Module và Components:** Tách code thành các module và components để tăng sự tái sử dụng và dễ duy trì.
