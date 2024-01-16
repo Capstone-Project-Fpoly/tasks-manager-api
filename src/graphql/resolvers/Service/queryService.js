@@ -49,6 +49,13 @@ class Query {
         return result;
     };
 
+    static getAllUsersByIds = async (uids, token) =>{
+        auth(token);
+        const users = await UserModel.find({ uid: { $in: uids } });
+        return users;
+
+    };
+
     static getAllBoardsByIds = async (ids, token) => {
         auth(token);
         const boards = await BoardModel.find({ id: { $in: ids } });
