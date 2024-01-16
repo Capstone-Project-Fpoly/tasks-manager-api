@@ -2,6 +2,8 @@ const BoardModel = require("../../../models/boardSchema");
 const auth = require("../authorization");
 
 class BoardMutations {
+
+
     static createBoard = async (args, context) => {
         const user = await auth(context.token);
         const board = new BoardModel({
@@ -18,5 +20,22 @@ class BoardMutations {
             .catch(err => { throw new Error(err) });
         return board;
     }
+
+    static getBoards = async (args, context) => {
+        const user = await auth(context.token);
+        const boards = await BoardModel.find({
+            $or: [
+                { ownerUser: user.uid },
+                { users: user.uid }
+            ]
+        });
+
+        return boards;
+
+    }
+
+
 }
+
+
 module.exports = BoardMutations;

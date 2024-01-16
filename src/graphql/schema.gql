@@ -8,6 +8,7 @@ type Mutation{
     loginByGoogle(idToken: String!): String
     testCallSubscription: String
     createBoard(title: String!, color:String, isPublic: Boolean!):Board
+    getBoards:[Board]
 }
 type Subscription{
     test: String,
