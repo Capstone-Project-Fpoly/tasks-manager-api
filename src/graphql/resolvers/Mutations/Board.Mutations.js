@@ -2,8 +2,6 @@ const BoardModel = require("../../../models/boardSchema");
 const auth = require("../authorization");
 
 class BoardMutations {
-
-
     static createBoard = async (args, context) => {
         const user = await auth(context.token);
         const board = new BoardModel({
@@ -33,7 +31,22 @@ class BoardMutations {
         return boards;
 
     }
-
+    static leaveBoard = async (args, context) => {
+        const user = await auth(context.token);
+        const uid = user.uid;
+        const idBoard = args.idBoard;
+        const board = await BoardModel.findOne({ _id: idBoard });
+        const resultBoard = await BoardModel.updateOne(
+            { _id: idBoard },
+            { $: { lists: uid } }
+        );
+        console.log(board);
+        console.log(resultBoard);
+        // const result = await BoardModel.updateOne(
+        //     { _id: idBoard },
+        //     { $pull: { users: uid } }
+        // );
+    }
 
 }
 

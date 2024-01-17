@@ -9,6 +9,7 @@ type Mutation{
     testCallSubscription: String
     createBoard(title: String!, color:String, isPublic: Boolean!):Board
     getBoards:[Board]
+    leaveBoard(idBoard:String!):Boolean
 }
 type Subscription{
     test: String,
