@@ -4,7 +4,7 @@ const getToken = require('./getToken');
 const loginByGoogle = require('./login/loginByGoogle');
 const { PubSub } = require("graphql-subscriptions");
 const Query = require('./Service/queryService');
-const { createBoard, getBoards } = require('./Mutations/Board.Mutations');
+const { createBoard, getBoards, leaveBoard } = require('./Mutations/Board.Mutations');
 const pubSub = new PubSub();
 const resolvers = {
     Query: {
@@ -16,6 +16,7 @@ const resolvers = {
         testCallSubscription: () => pubSub.publish("abc", {test:'mmmm'}),
         createBoard: (parent, args, context) => createBoard(args,context),
         getBoards:(parent, args, context) => getBoards(args,context),
+        leaveBoard: (_,args,context) => leaveBoard(args,context),
     },
     Subscription: {
         test: {
