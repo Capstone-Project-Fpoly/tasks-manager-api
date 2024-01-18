@@ -1,85 +1,85 @@
-
-type Query{
-    getToken(email:String!): String
-    me:User
+type Query {
+  getToken(email: String!): String
+  me: User
 }
 
-type Mutation{
-    loginByGoogle(idToken: String!): String
-    testCallSubscription: String
-    createBoard(title: String!, color:String, isPublic: Boolean!):Board
-    getBoards:[Board]
-    leaveBoard(idBoard:String!):Boolean
+type Mutation {
+  loginByGoogle(idToken: String!): String
+  testCallSubscription: String
+  createBoard(title: String!, color: String, isPublic: Boolean!): Board
+  getBoards: [Board]
+  leaveBoard(idBoard: String!): Boolean
 }
-type Subscription{
-    test: String,
+type Subscription {
+  test: String
 }
-type User{
-    uid: String!,
-    avatar: String,
-    createdAt: String,
-    updatedAt: String,
-    email: String,
-    fullName: String,
-}
-
-type Board{
-    id:String!,
-    ownerUser: User!,
-    color:String,
-    title:String,
-    isPublic:Boolean!,
-    lists:[List!],
-    users:[User!],
-    createdAt: String!,
-} 
-
-type List{
-    id:String!,
-    board:Board!,
-    label:String!,
-    createdAt: String!,
-    cards: [Card!],
+type User {
+  uid: String!
+  avatar: String
+  createdAt: String
+  updatedAt: String
+  email: String
+  fullName: String
 }
 
-type Card{
-    id:String!,
-    list:List!,
-    title:String,
-    description:String,
-    users:[User!],
-    endDate:String,
-    startedDate:String!,
-    reminder: Reminder,
-    comments: [Comment!],
-    checkLists: [CheckList!], 
-    createdAt: String!,
+type Board {
+  id: String!
+  ownerUser: User!
+  color: String
+  title: String
+  isPublic: Boolean!
+  lists: [List!]
+  users: [User!]
+  createdAt: String!
 }
 
-enum Reminder{
-    NoReminder,
-    OnDueDate,
-    FiveMinutesBefore,
-    TenMinutesBefore,
-    FifteenMinutesBefore,
-    OneHourBefore,
-    TwoHoursBefore,
-    OneDayBefore,
-    TwoDaysBefore,
+type List {
+  id: String!
+  board: Board!
+  label: String!
+  createdAt: String!
+  cards: [Card!]
+  createdBy: User!
 }
 
-type Comment{
-    id:String!,
-    user:User!,
-    card:Card!,
-    comment:String!,
-    createdAt: String!,
+type Card {
+  id: String!
+  list: List!
+  title: String
+  description: String
+  users: [User!]
+  endDate: String
+  startedDate: String!
+  reminder: Reminder
+  comments: [Comment!]
+  checkLists: [CheckList!]
+  createdAt: String!
+  createdBy: User!
 }
 
-type CheckList{
-    id:String!,
-    card:Card!,
-    content:String!,
-    isChecked:Boolean!,
+enum Reminder {
+  NoReminder
+  OnDueDate
+  FiveMinutesBefore
+  TenMinutesBefore
+  FifteenMinutesBefore
+  OneHourBefore
+  TwoHoursBefore
+  OneDayBefore
+  TwoDaysBefore
 }
- 
+
+type Comment {
+  id: String!
+  user: User!
+  card: Card!
+  comment: String!
+  createdAt: String!
+}
+
+type CheckList {
+  id: String!
+  card: Card!
+  content: String!
+  isChecked: Boolean!
+}
