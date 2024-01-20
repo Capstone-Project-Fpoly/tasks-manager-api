@@ -13,7 +13,6 @@ const saveOTPToFirebase = async (email, otp) => {
       otp: otp,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
-    console.log(s);
   } else {
     await admin.firestore().collection("otps").doc(email).set({
       otp: otp,
@@ -43,8 +42,8 @@ const sendOTPEmail = async (args, context) => {
     if (error) {
       throw new Error(`Lỗi khi gửi mã xác nhận Email: ${error}`);
     }
-    await saveOTPToFirebase(email, otp);
   });
+  await saveOTPToFirebase(email, otp);
   return true;
 };
 module.exports = sendOTPEmail;
