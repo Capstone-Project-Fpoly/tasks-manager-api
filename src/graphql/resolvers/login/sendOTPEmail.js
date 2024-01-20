@@ -2,7 +2,7 @@ const { regexEmail } = require("../Service/regex");
 const nodemailer = require("nodemailer");
 const admin = require("firebase-admin");
 
-const generateRandomOTP = () => {
+const generateRandomOTP = async () => {
   return Math.floor(1000 + Math.random() * 9000).toString();
 };
 
@@ -24,7 +24,7 @@ const saveOTPToFirebase = async (email, otp) => {
 const sendOTPEmail = async (args, context) => {
   const email = args.email;
   if (!regexEmail(email)) throw new Error("Email không đúng định dạng");
-  const otp = generateRandomOTP();
+  const otp = await generateRandomOTP();
   await saveOTPToFirebase(email, otp);
   let transporter = nodemailer.createTransport({
     service: "gmail",
