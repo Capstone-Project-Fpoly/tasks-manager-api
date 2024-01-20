@@ -9,10 +9,11 @@ const generateRandomOTP = async () => {
 const saveOTPToFirebase = async (email, otp) => {
   const otpDoc = await admin.firestore().collection("otps").doc(email).get();
   if (otpDoc.exists) {
-    await admin.firestore().collection("otps").doc(email).update({
+    const s = await admin.firestore().collection("otps").doc(email).update({
       otp: otp,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
+    console.log(s);
   } else {
     await admin.firestore().collection("otps").doc(email).set({
       otp: otp,
@@ -25,7 +26,6 @@ const sendOTPEmail = async (args, context) => {
   const email = args.email;
   if (!regexEmail(email)) throw new Error("Email không đúng định dạng");
   const otp = await generateRandomOTP();
-  await saveOTPToFirebase(email, otp);
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -39,10 +39,11 @@ const sendOTPEmail = async (args, context) => {
     subject: "Email Xác Minh",
     text: `Mã xác minh của bạn là: ${otp}.`,
   };
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, async (error, info) => {
     if (error) {
       throw new Error(`Lỗi khi gửi mã xác nhận Email: ${error}`);
     }
+    await saveOTPToFirebase(email, otp);
   });
   return true;
 };
