@@ -3,12 +3,26 @@ type Query {
   me: User
 }
 
+input InputEmail {
+  email: String!
+  passWord: String!
+}
+
+input InputVerifyEmail {
+  email: String!
+  otp: String!
+}
+
 type Mutation {
   loginByGoogle(idToken: String!): String
+  loginByEmail(idToken: String!): String
+  registerByEmail(input: InputEmail!): String
   testCallSubscription: String
   createBoard(title: String!, color: String, isPublic: Boolean!): Board
   getBoards: [Board]
   leaveBoard(idBoard: String!): Boolean
+  sendOTPEmail(email: String!): Boolean
+  verifyEmail(input: InputVerifyEmail!): Boolean
 }
 type Subscription {
   test: String

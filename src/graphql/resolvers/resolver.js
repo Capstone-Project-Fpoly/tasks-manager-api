@@ -1,82 +1,94 @@
-const { createPubSub } = require('graphql-yoga');
-const me = require('./Queres/me');
-const getToken = require('./getToken');
-const loginByGoogle = require('./login/loginByGoogle');
+const { createPubSub } = require("graphql-yoga");
+const me = require("./Queres/me");
+const getToken = require("./getToken");
+const loginByGoogle = require("./login/loginByGoogle");
 const { PubSub } = require("graphql-subscriptions");
-const Query = require('./Service/queryService');
-const { createBoard, getBoards, leaveBoard } = require('./Mutations/Board.Mutations');
+const Query = require("./Service/queryService");
+const {
+  createBoard,
+  getBoards,
+  leaveBoard,
+} = require("./Mutations/Board.Mutations");
+const loginByEMail = require("./login/loginByEmail");
+const registerByEmail = require("./login/registerByEmail");
+const sendOTPEmail = require("./login/sendOTPEmail");
+const verifyEmail = require("./login/verifyEmail");
+
 const pubSub = new PubSub();
 const resolvers = {
-    Query: {
-        getToken: getToken,
-        me: me,
+  Query: {
+    getToken: getToken,
+    me: me,
+  },
+  Mutation: {
+    loginByGoogle: loginByGoogle,
+    testCallSubscription: () => pubSub.publish("abc", { test: "mmmm" }),
+    createBoard: (parent, args, context) => createBoard(args, context),
+    getBoards: (parent, args, context) => getBoards(args, context),
+    leaveBoard: (_, args, context) => leaveBoard(args, context),
+    loginByEmail: (_, args, context) => loginByEMail(args, context),
+    registerByEmail: (_, args, context) => registerByEmail(args, context),
+    sendOTPEmail: (_, args, context) => sendOTPEmail(args, context),
+    verifyEmail: (_, args, context) => verifyEmail(args, context),
+  },
+  Subscription: {
+    test: {
+      subscribe: (parent, args, context, info) => {
+        return pubSub.asyncIterator("abc");
+      },
+      resolve: (payload, args, context, info) => {
+        console.log("User ID:", payload.userId);
+        console.log(args, context, payload);
+        return payload.test;
+      },
     },
-    Mutation: {
-        loginByGoogle: loginByGoogle,
-        testCallSubscription: () => pubSub.publish("abc", {test:'mmmm'}),
-        createBoard: (parent, args, context) => createBoard(args,context),
-        getBoards:(parent, args, context) => getBoards(args,context),
-        leaveBoard: (_,args,context) => leaveBoard(args,context),
+  },
+  Board: {
+    ownerUser: (parent, args, context) => {
+      return Query.getUserById(parent.ownerUser, context.token);
     },
-    Subscription: {
-        test: {
-            subscribe: (parent, args, context, info) => {
-                return pubSub.asyncIterator("abc");
-            },
-            resolve: (payload, args, context, info) => {
-                console.log("User ID:", payload.userId);
-                console.log(args,context,payload);
-                return payload.test;
-            },
-        },
+    users: (parent, args, context) => {
+      return Query.getAllUsersByIds(parent.users, context.token);
     },
-    Board: {
-        ownerUser: (parent, args, context) => {
-            return Query.getUserById(parent.ownerUser, context.token);
-        },
-        users: (parent, args, context) => {
-            return Query.getAllUsersByIds(parent.users, context.token);
-        },
-        lists: (parent, args, context) => {
-            return Query.getAllListsByIds(parent.lists, context.token);
-        },
+    lists: (parent, args, context) => {
+      return Query.getAllListsByIds(parent.lists, context.token);
     },
-    List: {
-        board: (parent, args, context) => {
-            return Query.getBoardById(parent.board, context.token);
-        },
-        cards: (parent, args, context) => {
-            return Query.getAllCardsByIds(parent.cards, context.token);
-        },
+  },
+  List: {
+    board: (parent, args, context) => {
+      return Query.getBoardById(parent.board, context.token);
     },
-    Card: {
-        list: (parent, args, context) => {
-            return Query.getListById(parent.list, context.token);
-        },
-        users: (parent, args, context) => {
-            return Query.getAllUsersByIds(parent.users, context.token);
-        },
-        comments: (parent, args, context) => {
-            return Query.getAllCommentsByIds(parent.comments, context.token);
-        },
-        checkLists: (parent, args, context) => {
-            return Query.getAllCheckListsByIds(parent.checkLists, context.token);
-        },
+    cards: (parent, args, context) => {
+      return Query.getAllCardsByIds(parent.cards, context.token);
     },
-    Comment: {
-        user: (parent, args, context) => {
-            return Query.getUserById(parent.user, context.token);
-        },
-        card: (parent, args, context) => {
-            return Query.getCardById(parent.card, context.token);
-        },
+  },
+  Card: {
+    list: (parent, args, context) => {
+      return Query.getListById(parent.list, context.token);
     },
-    CheckList: {
-        card: (parent, args, context) => {
-            return Query.getCardById(parent.card, context.token);
-        },
+    users: (parent, args, context) => {
+      return Query.getAllUsersByIds(parent.users, context.token);
     },
-    
-}
+    comments: (parent, args, context) => {
+      return Query.getAllCommentsByIds(parent.comments, context.token);
+    },
+    checkLists: (parent, args, context) => {
+      return Query.getAllCheckListsByIds(parent.checkLists, context.token);
+    },
+  },
+  Comment: {
+    user: (parent, args, context) => {
+      return Query.getUserById(parent.user, context.token);
+    },
+    card: (parent, args, context) => {
+      return Query.getCardById(parent.card, context.token);
+    },
+  },
+  CheckList: {
+    card: (parent, args, context) => {
+      return Query.getCardById(parent.card, context.token);
+    },
+  },
+};
 
 module.exports = resolvers;

@@ -1,12 +1,37 @@
 const jwt = require("jsonwebtoken");
+const admin = require("firebase-admin");
 const UserModel = require("../../../models/userSchema");
+
+const linkGoogleWithEmail = async (decodedToken) => {
+  const existingUser = await admin.auth().getUserByEmail(decodedToken.email);
+  if (!existingUser) return;
+  const uid = existingUser.uid;
+  await admin.auth().updateUser(uid, {
+    email: existingUser.email,
+    emailVerified: true,
+    displayName: decodedToken.name,
+    photoURL: decodedToken.picture,
+  });
+  await UserModel.updateOne(
+    { uid },
+    {
+      email: existingUser.email,
+      avatar: decodedToken.picture,
+      fullName: decodedToken.name,
+      updatedAt: new Date().toISOString(),
+    }
+  );
+};
+
 module.exports = async (parent, args, context) => {
   const decodedToken = jwt.decode(args.idToken);
   if (!decodedToken) throw new Error("Failed to login google");
-  const currentDate = new Date();
+  const currentDate = new Date().toISOString();
   const uid = decodedToken.user_id;
+
   const findUser = await UserModel.findOne({ uid });
   if (findUser) {
+    await linkGoogleWithEmail(decodedToken);
     const jwtToken = jwt.sign({ uid }, process.env.KEY);
     return jwtToken;
   }

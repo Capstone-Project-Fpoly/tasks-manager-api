@@ -10,7 +10,7 @@ class BoardMutations {
       title: args.title,
       isPublic: args.isPublic,
       lists: [],
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
       users: [],
       color: args.color ?? "168CD5",
       ownerUser: user.uid,
