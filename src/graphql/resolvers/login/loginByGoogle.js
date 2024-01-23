@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const admin = require("firebase-admin");
 const UserModel = require("../../../models/userSchema");
+const authDeviceId = require("../Service/authDeviceId");
 
 const linkGoogleWithEmail = async (decodedToken) => {
   const existingUser = await admin.auth().getUserByEmail(decodedToken.email);
@@ -24,15 +25,19 @@ const linkGoogleWithEmail = async (decodedToken) => {
 };
 
 module.exports = async (parent, args, context) => {
-  const decodedToken = jwt.decode(args.idToken);
+  const input = args.input;
+  const idToken = input.idToken;
+  const deviceId = input.deviceId;
+
+  const decodedToken = jwt.decode(idToken);
   if (!decodedToken) throw new Error("Failed to login google");
   const currentDate = new Date().toISOString();
   const uid = decodedToken.user_id;
-
   const findUser = await UserModel.findOne({ uid });
   if (findUser) {
     await linkGoogleWithEmail(decodedToken);
     const jwtToken = jwt.sign({ uid }, process.env.KEY);
+    await authDeviceId(uid, jwtToken, deviceId);
     return jwtToken;
   }
   const user = new UserModel({
@@ -44,8 +49,10 @@ module.exports = async (parent, args, context) => {
     updatedAt: currentDate,
   });
   await user.save().catch((err) => {
+    console.log(err);
     throw new Error(err);
   });
   const jwtToken = jwt.sign({ uid: uid }, process.env.KEY);
+  authDeviceId(uid, jwtToken, deviceId);
   return jwtToken;
 };
