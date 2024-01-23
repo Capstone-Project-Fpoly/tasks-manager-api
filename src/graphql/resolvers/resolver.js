@@ -13,6 +13,7 @@ const loginByEMail = require("./login/loginByEmail");
 const registerByEmail = require("./login/registerByEmail");
 const sendOTPEmail = require("./login/sendOTPEmail");
 const verifyEmail = require("./login/verifyEmail");
+const logout = require("./login/logout");
 
 const pubSub = new PubSub();
 const resolvers = {
@@ -30,6 +31,7 @@ const resolvers = {
     registerByEmail: (_, args, context) => registerByEmail(args, context),
     sendOTPEmail: (_, args, context) => sendOTPEmail(args, context),
     verifyEmail: (_, args, context) => verifyEmail(args, context),
+    logout: (_, args, context) => logout(context),
   },
   Subscription: {
     test: {
