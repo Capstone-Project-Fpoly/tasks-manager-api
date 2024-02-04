@@ -68,3 +68,4 @@ dist/
 
 # Temporary folder for builds
 build/
+.vercel
