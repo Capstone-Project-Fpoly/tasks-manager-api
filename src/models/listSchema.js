@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
 const listSchema = new mongoose.Schema({
-  id: { type: String, required: true },
-  board: String,
+  board: { type: String, required: true },
   label: { type: String, required: true },
   status: {
     type: String,
