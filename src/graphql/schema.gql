@@ -29,6 +29,10 @@ type Mutation {
   sendOTPEmail(email: String!): Boolean
   verifyEmail(input: InputVerifyEmail!): Boolean
   logout: Boolean
+  getLists(idBoard: String!): [List]
+  createList(idBoard: String!, label: String!): List
+  updateList(idList: String!, label: String!): List
+  deleteList(idList: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -48,14 +52,14 @@ type Board {
   color: String
   title: String
   isPublic: Boolean!
-  lists: [List!]
-  users: [User!]
+  # lists: [List!]
+  # users: [User!]
   createdAt: String!
 }
 
 type List {
   id: String!
-  board: Board!
+  # board: Board!
   label: String!
   createdAt: String!
   cards: [Card!]
@@ -64,7 +68,7 @@ type List {
 
 type Card {
   id: String!
-  list: List!
+  # list: List!
   title: String
   description: String
   users: [User!]
@@ -92,14 +96,14 @@ enum Reminder {
 type Comment {
   id: String!
   user: User!
-  card: Card!
+  # card: Card!
   comment: String!
   createdAt: String!
 }
 
 type CheckList {
   id: String!
-  card: Card!
+  # card: Card!
   content: String!
   isChecked: Boolean!
 }

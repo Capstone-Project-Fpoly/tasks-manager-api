@@ -14,6 +14,12 @@ const registerByEmail = require("./login/registerByEmail");
 const sendOTPEmail = require("./login/sendOTPEmail");
 const verifyEmail = require("./login/verifyEmail");
 const logout = require("./login/logout");
+const {
+  getLists,
+  createList,
+  updateList,
+  deleteList,
+} = require("./Mutations/List.Mutations");
 
 const pubSub = new PubSub();
 const resolvers = {
@@ -33,6 +39,10 @@ const resolvers = {
     sendOTPEmail: (_, args, context) => sendOTPEmail(args, context),
     verifyEmail: (_, args, context) => verifyEmail(args, context),
     logout: (_, args, context) => logout(context),
+    getLists: (_, args, context) => getLists(args, context),
+    createList: (_, args, context) => createList(args, context),
+    updateList: (_, args, context) => updateList(args, context),
+    deleteList: (_, args, context) => deleteList(args, context),
   },
   Subscription: {
     test: {
@@ -47,28 +57,34 @@ const resolvers = {
     },
   },
   Board: {
+    id: (parent) => parent._id.toString(),
     ownerUser: (parent, args, context) => {
       return Query.getUserById(parent.ownerUser, context.token);
     },
-    users: (parent, args, context) => {
-      return Query.getAllUsersByIds(parent.users, context.token);
-    },
-    lists: (parent, args, context) => {
-      return Query.getAllListsByIds(parent.lists, context.token);
-    },
+    // users: (parent, args, context) => {
+    //   return Query.getAllUsersByIds(parent.users, context.token);
+    // },
+    // lists: (parent, args, context) => {
+    //   return Query.getAllListsByIds(parent.lists, context.token);
+    // },
   },
   List: {
-    board: (parent, args, context) => {
-      return Query.getBoardById(parent.board, context.token);
-    },
+    // board: (parent, args, context) => {
+    //   return Query.getBoardById(parent.board, context.token);
+    // },
+    id: (parent) => parent._id.toString(),
     cards: (parent, args, context) => {
       return Query.getAllCardsByIds(parent.cards, context.token);
     },
+    createdBy: (parent, args, context) => {
+      return Query.getUserById(parent.createdBy, context.token);
+    },
   },
   Card: {
-    list: (parent, args, context) => {
-      return Query.getListById(parent.list, context.token);
-    },
+    // list: (parent, args, context) => {
+    //   return Query.getListById(parent.list, context.token);
+    // },
+    id: (parent) => parent._id.toString(),
     users: (parent, args, context) => {
       return Query.getAllUsersByIds(parent.users, context.token);
     },
@@ -78,19 +94,24 @@ const resolvers = {
     checkLists: (parent, args, context) => {
       return Query.getAllCheckListsByIds(parent.checkLists, context.token);
     },
+    createdBy: (parent, args, context) => {
+      return Query.getUserById(parent.createdBy, context.token);
+    },
   },
   Comment: {
+    id: (parent) => parent._id.toString(),
     user: (parent, args, context) => {
       return Query.getUserById(parent.user, context.token);
     },
-    card: (parent, args, context) => {
-      return Query.getCardById(parent.card, context.token);
-    },
+    // card: (parent, args, context) => {
+    //   return Query.getCardById(parent.card, context.token);
+    // },
   },
   CheckList: {
-    card: (parent, args, context) => {
-      return Query.getCardById(parent.card, context.token);
-    },
+    id: (parent) => parent._id.toString(),
+    // card: (parent, args, context) => {
+    //   return Query.getCardById(parent.card, context.token);
+    // },
   },
 };
 
