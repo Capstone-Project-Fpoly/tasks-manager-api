@@ -80,6 +80,10 @@ const startServer = async () => {
     }
   );
   app.use(express.static(path.join(__dirname, "public")));
+  app.get("/", (req, res) => {
+    const indexPath = path.join(__dirname, "index.html");
+    res.sendFile(indexPath);
+  });
   httpServer.listen(port, () => {
     console.log(
       `Server ready at http://localhost:${port}${server.graphqlPath}`
