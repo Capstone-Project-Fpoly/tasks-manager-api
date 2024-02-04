@@ -14,6 +14,8 @@ class BoardMutations {
       users: [],
       color: args.color ?? "168CD5",
       ownerUser: user.uid,
+      updatedAt: new Date().toISOString(),
+      status: "Active",
     });
 
     board.save().catch((err) => {
@@ -26,8 +28,8 @@ class BoardMutations {
     const user = await auth(context.token);
     const boards = await BoardModel.find({
       $or: [{ ownerUser: user.uid }, { users: user.uid }],
+      status: "Active",
     });
-
     return boards;
   };
   static leaveBoard = async (args, context) => {
