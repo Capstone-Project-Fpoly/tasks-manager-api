@@ -61,6 +61,7 @@ const startServer = async () => {
         console.log(connectionParams, webSocket, context);
       },
     },
+    introspection: true,
     persistedQueries: false,
     context: context,
   });
