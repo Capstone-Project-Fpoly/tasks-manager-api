@@ -4,6 +4,7 @@ const getToken = require("./getToken");
 const loginByGoogle = require("./login/loginByGoogle");
 const { PubSub } = require("graphql-subscriptions");
 const Query = require("./Service/queryService");
+const auth = require("./authorization");
 const {
   createBoard,
   getBoards,
@@ -112,6 +113,12 @@ const resolvers = {
     // card: (parent, args, context) => {
     //   return Query.getCardById(parent.card, context.token);
     // },
+  },
+  Notification: {
+    id: (parent) => parent._id.toString(),
+    creater: (parent, args, context) => {
+      return Query.getUserById(parent.user, context.token);
+    },
   },
 };
 

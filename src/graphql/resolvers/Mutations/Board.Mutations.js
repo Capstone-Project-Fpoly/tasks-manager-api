@@ -17,7 +17,6 @@ class BoardMutations {
       updatedAt: new Date().toISOString(),
       status: "Active",
     });
-
     board.save().catch((err) => {
       throw new Error(err);
     });
@@ -58,8 +57,10 @@ class BoardMutations {
         { list: { $in: allListIdCards } },
         { $pull: { users: uid } }
       );
+
       return true;
     } catch (error) {
+      console.log(error);
       return false;
     }
   };

@@ -107,3 +107,21 @@ type CheckList {
   content: String!
   isChecked: Boolean!
 }
+
+type Notification {
+  id: String!
+  createdAt: String!
+  is_seen: Boolean!
+  creater: User!
+  title: String!
+  content: String!
+  topic: TopicNotification!
+}
+
+enum TopicNotification {
+  Board
+  List
+  Card
+  CheckList
+  Comment
+}
