@@ -12,6 +12,12 @@ const cardSchema = new mongoose.Schema({
   checkLists: [String],
   createdAt: { type: String, required: true },
   createdBy: { type: String, require: true },
+  status: {
+    type: String,
+    enum: ["Active", "Archived", "Deleted"],
+    default: "Active",
+  },
+  updatedAt: { type: String, required: true },
 });
 
 const CardModel = mongoose.model("cards", cardSchema);

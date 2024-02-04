@@ -4,6 +4,12 @@ const listSchema = new mongoose.Schema({
   id: { type: String, required: true },
   board: String,
   label: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ["Active", "Archived", "Deleted"],
+    default: "Active",
+  },
+  updatedAt: { type: String, required: true },
   createdAt: { type: String, required: true },
   cards: [String],
   createdBy: { type: String, require: true },
