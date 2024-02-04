@@ -31,7 +31,7 @@ type Mutation {
   logout: Boolean
 }
 type Subscription {
-  test: String
+  test(id: String!): String
 }
 type User {
   uid: String!

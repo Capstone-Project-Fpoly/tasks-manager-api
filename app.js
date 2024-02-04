@@ -58,6 +58,7 @@ const startServer = async () => {
     ],
     subscriptions: {
       onConnect: (connectionParams, webSocket, context) => {
+        console.log("đã kết nói websocket");
         console.log(connectionParams, webSocket, context);
       },
     },

@@ -23,7 +23,8 @@ const resolvers = {
   },
   Mutation: {
     loginByGoogle: loginByGoogle,
-    testCallSubscription: () => pubSub.publish("abc", { test: "mmmm" }),
+    testCallSubscription: () =>
+      pubSub.publish("123", { abc: "mmmm", ayx: "hhhhh" }),
     createBoard: (parent, args, context) => createBoard(args, context),
     getBoards: (parent, args, context) => getBoards(args, context),
     leaveBoard: (_, args, context) => leaveBoard(args, context),
@@ -36,12 +37,12 @@ const resolvers = {
   Subscription: {
     test: {
       subscribe: (parent, args, context, info) => {
-        return pubSub.asyncIterator("abc");
+        return pubSub.asyncIterator(args.id);
       },
       resolve: (payload, args, context, info) => {
         console.log("User ID:", payload.userId);
         console.log(args, context, payload);
-        return payload.test;
+        return payload.abc;
       },
     },
   },
