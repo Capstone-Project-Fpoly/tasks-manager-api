@@ -4,87 +4,77 @@ const CheckListModel = require("../../../models/checkListShema");
 const CommentModel = require("../../../models/commentSchema");
 const ListModel = require("../../../models/listSchema");
 const UserModel = require("../../../models/userSchema");
-const auth = require('../authorization');
+const auth = require("../authorization");
 
 class Query {
-    static getUserById = async (uid, token) => {
-        auth(token);
-        if (!uid) return null;
-        const user = await UserModel.findOne({ uid });
-        return user;
-    };
+  static getUserById = async (uid) => {
+    if (!uid) return null;
+    const user = await UserModel.findOne({ uid });
+    return user;
+  };
 
-    static getBoardById = async (id, token) => {
-        auth(token);
-        if (!id) return null;
-        const result = await BoardModel.findOne({ id });
-        return result;
-    };
+  static getBoardById = async (id) => {
+    if (!id) return null;
+    const result = await BoardModel.findOne({ _id: id, status: "Active" });
+    return result;
+  };
 
-    static getCardById = async (id, token) => {
-        auth(token);
-        if (!id) return null;
-        const result = await CardModel.findOne({ id });
-        return result;
-    };
+  static getCardById = async (id) => {
+    if (!id) return null;
+    const result = await CardModel.findOne({ _id: id, status: "Active" });
+    return result;
+  };
 
-    static getCheckListById = async (id, token) => {
-        auth(token);
-        if (!id) return null;
-        const result = await CheckListModel.findOne({ id });
-        return result;
-    };
+  static getCheckListById = async (id) => {
+    if (!id) return null;
+    const result = await CheckListModel.findOne({ _id: id });
+    return result;
+  };
 
-    static getCommentById = async (id, token) => {
-        auth(token);
-        if (!id) return null;
-        const result = await CommentModel.findOne({ id });
-        return result;
-    };
+  static getCommentById = async (id) => {
+    if (!id) return null;
+    const result = await CommentModel.findOne({ _id: id });
+    return result;
+  };
 
-    static getListById = async (id, token) => {
-        auth(token);
-        if (!id) return null;
-        const result = await ListModel.findOne({ id });
-        return result;
-    };
+  static getListById = async (id) => {
+    if (!id) return null;
+    const result = await ListModel.findOne({ _id: id, status: "Active" });
+    return result;
+  };
 
-    static getAllUsersByIds = async (uids, token) =>{
-        auth(token);
-        const users = await UserModel.find({ uid: { $in: uids } });
-        return users;
+  static getAllUsersByIds = async (uids) => {
+    const users = await UserModel.find({ uid: { $in: uids } });
+    return users;
+  };
 
-    };
+  static getAllBoardsByIds = async (ids) => {
+    const boards = await BoardModel.find({
+      _id: { $in: ids },
+      status: "Active",
+    });
+    return boards;
+  };
 
-    static getAllBoardsByIds = async (ids, token) => {
-        auth(token);
-        const boards = await BoardModel.find({ id: { $in: ids } });
-        return boards;
-    };
+  static getAllCardsByIds = async (ids) => {
+    const cards = await CardModel.find({ _id: { $in: ids }, status: "Active" });
+    return cards;
+  };
 
-    static getAllCardsByIds = async (ids, token) => {
-        auth(token);
-        const cards = await CardModel.find({ id: { $in: ids } });
-        return cards;
-    };
+  static getAllCheckListsByIds = async (ids) => {
+    const checkLists = await CheckListModel.find({ _id: { $in: ids } });
+    return checkLists;
+  };
 
-    static getAllCheckListsByIds = async (ids, token) => {
-        auth(token);
-        const checkLists = await CheckListModel.find({ id: { $in: ids } });
-        return checkLists;
-    };
+  static getAllCommentsByIds = async (ids) => {
+    const comments = await CommentModel.find({ _id: { $in: ids } });
+    return comments;
+  };
 
-    static getAllCommentsByIds = async (ids, token) => {
-        auth(token);
-        const comments = await CommentModel.find({ id: { $in: ids } });
-        return comments;
-    };
-
-    static getAllListsByIds = async (ids, token) => {
-        auth(token);
-        const lists = await ListModel.find({ id: { $in: ids } });
-        return lists;
-    };
+  static getAllListsByIds = async (ids) => {
+    const lists = await ListModel.find({ _id: { $in: ids }, status: "Active" });
+    return lists;
+  };
 }
 
 module.exports = Query;
