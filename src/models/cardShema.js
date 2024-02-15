@@ -1,13 +1,29 @@
 const mongoose = require("mongoose");
 
+const ReminderEnum = {
+  Unknown: "Unknown",
+  OnDueDate: "OnDueDate",
+  FiveMinutesBefore: "FiveMinutesBefore",
+  TenMinutesBefore: "TenMinutesBefore",
+  FifteenMinutesBefore: "FifteenMinutesBefore",
+  OneHourBefore: "OneHourBefore",
+  TwoHoursBefore: "TwoHoursBefore",
+  OneDayBefore: "OneDayBefore",
+  TwoDaysBefore: "TwoDaysBefore",
+};
+
 const cardSchema = new mongoose.Schema({
-  list: String,
-  title: String,
+  list: { type: String, require: true },
+  title: { type: String, require: true },
   description: String,
   users: [String],
   endDate: String,
-  startedDate: { type: String, required: true },
-  reminder: String, // Enum values are saved as strings in MongoDB
+  startedDate: String,
+  reminder: {
+    type: String,
+    enum: Object.values(ReminderEnum),
+    default: ReminderEnum.Unknown,
+  },
   comments: [String],
   checkLists: [String],
   createdAt: { type: String, required: true },

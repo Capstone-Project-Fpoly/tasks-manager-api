@@ -18,6 +18,22 @@ input InputLogin {
   deviceId: String!
 }
 
+input CheckListInput {
+  content: String!
+  isChecked: Boolean!
+}
+
+input InputUpdateCard {
+  idCard: String!
+  title: String
+  description: String
+  users: [String!]
+  endDate: String
+  startedDate: String
+  reminder: Reminder
+  checkLists: [CheckListInput!]
+}
+
 type Mutation {
   loginByGoogle(input: InputLogin!): String
   loginByEmail(input: InputLogin!): String
@@ -33,6 +49,10 @@ type Mutation {
   createList(idBoard: String!, label: String!): List
   updateList(idList: String!, label: String!): List
   deleteList(idList: String!): Boolean
+  getCard(idCard: String!): Card
+  createCard(idList: String!, title: String!): Card
+  updateCard(input: InputUpdateCard!): Card
+  deleteCard(idCard: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -73,7 +93,7 @@ type Card {
   description: String
   users: [User!]
   endDate: String
-  startedDate: String!
+  startedDate: String
   reminder: Reminder
   comments: [Comment!]
   checkLists: [CheckList!]
@@ -82,7 +102,7 @@ type Card {
 }
 
 enum Reminder {
-  NoReminder
+  Unknown
   OnDueDate
   FiveMinutesBefore
   TenMinutesBefore

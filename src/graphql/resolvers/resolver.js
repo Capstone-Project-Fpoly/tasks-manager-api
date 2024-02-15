@@ -1,10 +1,8 @@
-const { createPubSub } = require("graphql-yoga");
 const me = require("./Queres/me");
 const getToken = require("./getToken");
 const loginByGoogle = require("./login/loginByGoogle");
 const { PubSub } = require("graphql-subscriptions");
 const Query = require("./Service/queryService");
-const auth = require("./authorization");
 const {
   createBoard,
   getBoards,
@@ -21,6 +19,13 @@ const {
   updateList,
   deleteList,
 } = require("./Mutations/List.Mutations");
+
+const auth = require("./authorization");
+const {
+  updateCard,
+  createCard,
+  deleteCard,
+} = require("./Mutations/Card.Mutation");
 
 const pubSub = new PubSub();
 const resolvers = {
@@ -44,6 +49,13 @@ const resolvers = {
     createList: (_, args, context) => createList(args, context),
     updateList: (_, args, context) => updateList(args, context),
     deleteList: (_, args, context) => deleteList(args, context),
+    getCard: async (_, args, context) => {
+      await auth(context.token);
+      return Query.getCardById(args.idCard);
+    },
+    createCard: (_, args, context) => createCard(args, context),
+    updateCard: (_, args, context) => updateCard(args, context),
+    deleteCard: (_, args, context) => deleteCard(args, context),
   },
   Subscription: {
     test: {
@@ -60,64 +72,64 @@ const resolvers = {
   Board: {
     id: (parent) => parent._id.toString(),
     ownerUser: (parent, args, context) => {
-      return Query.getUserById(parent.ownerUser, context.token);
+      return Query.getUserById(parent.ownerUser);
     },
     // users: (parent, args, context) => {
-    //   return Query.getAllUsersByIds(parent.users, context.token);
+    //   return Query.getAllUsersByIds(parent.users);
     // },
     // lists: (parent, args, context) => {
-    //   return Query.getAllListsByIds(parent.lists, context.token);
+    //   return Query.getAllListsByIds(parent.lists);
     // },
   },
   List: {
     // board: (parent, args, context) => {
-    //   return Query.getBoardById(parent.board, context.token);
+    //   return Query.getBoardById(parent.board);
     // },
     id: (parent) => parent._id.toString(),
     cards: (parent, args, context) => {
-      return Query.getAllCardsByIds(parent.cards, context.token);
+      return Query.getAllCardsByIds(parent.cards);
     },
     createdBy: (parent, args, context) => {
-      return Query.getUserById(parent.createdBy, context.token);
+      return Query.getUserById(parent.createdBy);
     },
   },
   Card: {
     // list: (parent, args, context) => {
-    //   return Query.getListById(parent.list, context.token);
+    //   return Query.getListById(parent.list);
     // },
     id: (parent) => parent._id.toString(),
     users: (parent, args, context) => {
-      return Query.getAllUsersByIds(parent.users, context.token);
+      return Query.getAllUsersByIds(parent.users);
     },
     comments: (parent, args, context) => {
-      return Query.getAllCommentsByIds(parent.comments, context.token);
+      return Query.getAllCommentsByIds(parent.comments);
     },
     checkLists: (parent, args, context) => {
-      return Query.getAllCheckListsByIds(parent.checkLists, context.token);
+      return Query.getAllCheckListsByIds(parent.checkLists);
     },
     createdBy: (parent, args, context) => {
-      return Query.getUserById(parent.createdBy, context.token);
+      return Query.getUserById(parent.createdBy);
     },
   },
   Comment: {
     id: (parent) => parent._id.toString(),
     user: (parent, args, context) => {
-      return Query.getUserById(parent.user, context.token);
+      return Query.getUserById(parent.user);
     },
     // card: (parent, args, context) => {
-    //   return Query.getCardById(parent.card, context.token);
+    //   return Query.getCardById(parent.card);
     // },
   },
   CheckList: {
     id: (parent) => parent._id.toString(),
     // card: (parent, args, context) => {
-    //   return Query.getCardById(parent.card, context.token);
+    //   return Query.getCardById(parent.card);
     // },
   },
   Notification: {
     id: (parent) => parent._id.toString(),
     creater: (parent, args, context) => {
-      return Query.getUserById(parent.user, context.token);
+      return Query.getUserById(parent.user);
     },
   },
 };
