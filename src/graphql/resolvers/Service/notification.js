@@ -21,7 +21,7 @@ class NotificationService {
     }
     return deviceIds;
   };
-  static sendNotification = async (deviceIds, notificationBody) => {
+  static send = async (deviceIds, notificationBody) => {
     const tokens = deviceIds.map((token) => token);
     const message = {
       notification: {

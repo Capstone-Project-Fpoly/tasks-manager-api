@@ -28,6 +28,7 @@ const {
 } = require("./Mutations/Card.Mutation");
 
 const pubSub = new PubSub();
+
 const resolvers = {
   Query: {
     getToken: getToken,

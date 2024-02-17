@@ -14,5 +14,5 @@ const notificationSchema = new mongoose.Schema({
   createdAt: { type: String, required: true },
 });
 
-const BoardModel = mongoose.model("boards", notificationSchema);
-module.exports = BoardModel;
+const NotificationModel = mongoose.model("notifications", notificationSchema);
+module.exports = NotificationModel;

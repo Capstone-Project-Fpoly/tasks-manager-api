@@ -30,7 +30,7 @@ input InputUpdateCard {
   users: [String!]
   endDate: String
   startedDate: String
-  reminder: Reminder
+  reminder: Reminder!
   checkLists: [CheckListInput!]
 }
 
@@ -94,7 +94,7 @@ type Card {
   users: [User!]
   endDate: String
   startedDate: String
-  reminder: Reminder
+  reminder: Reminder!
   comments: [Comment!]
   checkLists: [CheckList!]
   createdAt: String!
