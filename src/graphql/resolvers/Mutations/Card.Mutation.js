@@ -1,3 +1,4 @@
+const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
@@ -22,11 +23,9 @@ class CardService {
       { _id: args.idList },
       { $push: { cards: savedCard._id } },
       { new: true }
-    )
-      .catch((err) => {
-        throw new Error(err);
-      })
-      .then((res) => console.log(res));
+    ).catch((err) => {
+      throw new Error(err);
+    });
 
     return savedCard;
   };
@@ -84,7 +83,6 @@ class CardService {
     return updateCard;
   };
 
-  // Delete (archive) a card by id
   static deleteCard = async (args, context) => {
     const user = await auth(context.token);
     const cardId = args.idCard;
@@ -97,6 +95,39 @@ class CardService {
       throw new Error(err);
     });
     return true;
+  };
+  static moveCard = async (args, context) => {
+    const user = await auth(context.token);
+    try {
+      const idBoard = args.idBoard;
+      const input = args.input;
+      const { oldItemIndex, oldListIndex, newItemIndex, newListIndex } = input;
+
+      const board = await BoardModel.findOne({ _id: idBoard });
+
+      const oldListId = board.lists[oldListIndex];
+      const newListId = board.lists[newListIndex];
+
+      const [oldList, newList] = await Promise.all([
+        ListModel.findById(oldListId),
+        ListModel.findById(newListId),
+      ]);
+
+      if (oldListId == newListId) {
+        const [card] = oldList.cards.splice(oldItemIndex, 1);
+        oldList.cards.splice(newItemIndex, 0, card);
+        await oldList.save();
+      } else {
+        const [card] = oldList.cards.splice(oldItemIndex, 1);
+        newList.cards.splice(newItemIndex, 0, card);
+        await Promise.all([oldList.save(), newList.save()]);
+      }
+
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   };
 }
 

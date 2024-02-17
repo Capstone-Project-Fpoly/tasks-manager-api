@@ -18,6 +18,7 @@ const {
   createList,
   updateList,
   deleteList,
+  moveList,
 } = require("./Mutations/List.Mutations");
 
 const auth = require("./authorization");
@@ -25,6 +26,7 @@ const {
   updateCard,
   createCard,
   deleteCard,
+  moveCard,
 } = require("./Mutations/Card.Mutation");
 
 const pubSub = new PubSub();
@@ -57,6 +59,8 @@ const resolvers = {
     createCard: (_, args, context) => createCard(args, context),
     updateCard: (_, args, context) => updateCard(args, context),
     deleteCard: (_, args, context) => deleteCard(args, context),
+    moveList: (_, args, context) => moveList(args, context),
+    moveCard: (_, args, context) => moveCard(args, context),
   },
   Subscription: {
     test: {

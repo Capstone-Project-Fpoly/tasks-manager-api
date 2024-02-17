@@ -6,12 +6,26 @@ class ListMutations {
   static getLists = async (args, context) => {
     const user = await auth(context.token);
     const idBoard = args.idBoard;
+    const board = await BoardModel.findById(idBoard).catch((err) => {
+      throw new Error(err);
+    });
+
+    if (!board) {
+      throw new Error("Không tìm thấy bảng");
+    }
+
     const lists = await ListModel.find({
-      board: idBoard,
+      _id: { $in: board.lists },
       status: "Active",
     }).catch((err) => {
       throw new Error(err);
     });
+
+    lists.sort(
+      (a, b) =>
+        board.lists.indexOf(a._id.toString()) -
+        board.lists.indexOf(b._id.toString())
+    );
     return lists;
   };
   static createList = async (args, context) => {
@@ -28,6 +42,13 @@ class ListMutations {
       cards: [],
     });
     const savedList = await newList.save().catch((err) => {
+      throw new Error(err);
+    });
+    BoardModel.findOneAndUpdate(
+      { _id: idBoard },
+      { $push: { lists: savedList._id } },
+      { new: true }
+    ).catch((err) => {
       throw new Error(err);
     });
 
@@ -72,6 +93,50 @@ class ListMutations {
     if (!updatedList) {
       throw new Error("Không tìm thấy list này");
     }
+
+    return true;
+  };
+
+  static moveList = async (args, context) => {
+    const user = await auth(context.token);
+
+    const idBoard = args.idBoard;
+    const input = args.input;
+
+    if (!idBoard || !input) {
+      throw new Error("id bảng không được để trống");
+    }
+
+    const { oldListIndex, newListIndex } = input;
+
+    if (
+      oldListIndex === undefined ||
+      newListIndex === undefined ||
+      oldListIndex < 0 ||
+      newListIndex < 0 ||
+      !Number.isInteger(oldListIndex) ||
+      !Number.isInteger(newListIndex)
+    ) {
+      throw new Error("oldListIndex and newListIndex không hợp lệ");
+    }
+
+    const board = await BoardModel.findById(idBoard);
+
+    if (!board) {
+      throw new Error("Không tìm thấy bảng");
+    }
+
+    if (
+      oldListIndex >= board.lists.length ||
+      newListIndex >= board.lists.length
+    ) {
+      throw new Error("Index không hợp lệ");
+    }
+
+    const [removedList] = board.lists.splice(oldListIndex, 1);
+    board.lists.splice(newListIndex, 0, removedList);
+
+    await board.save();
 
     return true;
   };
