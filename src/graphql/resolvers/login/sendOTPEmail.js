@@ -40,6 +40,7 @@ const sendOTPEmail = async (args, context) => {
   };
   transporter.sendMail(mailOptions, async (error, info) => {
     if (error) {
+      console.log(error);
       throw new Error(`Lỗi khi gửi mã xác nhận Email: ${error}`);
     }
   });
