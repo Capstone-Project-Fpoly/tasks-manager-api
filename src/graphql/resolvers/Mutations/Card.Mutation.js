@@ -6,7 +6,6 @@ class CardService {
   static createCard = async (args, context) => {
     const user = await auth(context.token);
     const newCard = new CardModel({
-      list: args.idList,
       title: args.title,
       reminder: "Unknown",
       createdBy: user.uid,
