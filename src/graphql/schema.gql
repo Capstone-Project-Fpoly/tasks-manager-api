@@ -34,6 +34,18 @@ input InputUpdateCard {
   checkLists: [CheckListInput!]
 }
 
+input InputMoveList {
+  oldListIndex: Int!
+  newListIndex: Int!
+}
+
+input InputMoveCard {
+  oldItemIndex: Int!
+  oldListIndex: Int!
+  newItemIndex: Int!
+  newListIndex: Int!
+}
+
 type Mutation {
   loginByGoogle(input: InputLogin!): String
   loginByEmail(input: InputLogin!): String
@@ -53,6 +65,8 @@ type Mutation {
   createCard(idList: String!, title: String!): Card
   updateCard(input: InputUpdateCard!): Card
   deleteCard(idCard: String!): Boolean
+  moveList(idBoard: String!, input: InputMoveList!): Boolean
+  moveCard(idBoard: String!, input: InputMoveCard!): Boolean
 }
 type Subscription {
   test(id: String!): String

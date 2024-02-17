@@ -1,3 +1,4 @@
+const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
@@ -22,11 +23,9 @@ class CardService {
       { _id: args.idList },
       { $push: { cards: savedCard._id } },
       { new: true }
-    )
-      .catch((err) => {
-        throw new Error(err);
-      })
-      .then((res) => console.log(res));
+    ).catch((err) => {
+      throw new Error(err);
+    });
 
     return savedCard;
   };
@@ -84,7 +83,6 @@ class CardService {
     return updateCard;
   };
 
-  // Delete (archive) a card by id
   static deleteCard = async (args, context) => {
     const user = await auth(context.token);
     const cardId = args.idCard;
@@ -96,6 +94,75 @@ class CardService {
     ).catch((err) => {
       throw new Error(err);
     });
+    return true;
+  };
+  static moveCard = async (args, context) => {
+    const user = await auth(context.token);
+
+    const idBoard = args.idBoard;
+    const input = args.input;
+
+    if (!idBoard || !input) {
+      throw new Error("idBoard không được để trống");
+    }
+
+    const { oldItemIndex, oldListIndex, newItemIndex, newListIndex } = input;
+
+    if (
+      oldItemIndex === undefined ||
+      oldListIndex === undefined ||
+      newItemIndex === undefined ||
+      newListIndex === undefined ||
+      oldItemIndex < 0 ||
+      oldListIndex < 0 ||
+      newItemIndex < 0 ||
+      newListIndex < 0 ||
+      !Number.isInteger(oldItemIndex) ||
+      !Number.isInteger(oldListIndex) ||
+      !Number.isInteger(newItemIndex) ||
+      !Number.isInteger(newListIndex)
+    ) {
+      throw new Error("Input không hợp lệ");
+    }
+
+    const board = await BoardModel.findById(idBoard);
+
+    if (!board) {
+      throw new Error("Không tìm thấy bảng này");
+    }
+
+    if (
+      oldListIndex >= board.lists.length ||
+      newListIndex >= board.lists.length
+    ) {
+      throw new Error("Index danh sách không hợp lệ");
+    }
+
+    const oldListId = board.lists[oldListIndex];
+    const newListId = board.lists[newListIndex];
+
+    const [oldList, newList] = await Promise.all([
+      ListModel.findById(oldListId),
+      ListModel.findById(newListId),
+    ]);
+
+    if (
+      oldItemIndex >= oldList.cards.length ||
+      newItemIndex > newList.cards.length
+    ) {
+      throw new Error("Index thẻ không hợp lệ");
+    }
+
+    if (oldListId.toString() === newListId.toString()) {
+      const [card] = oldList.cards.splice(oldItemIndex, 1);
+      oldList.cards.splice(newItemIndex, 0, card);
+      await oldList.save();
+    } else {
+      const [card] = oldList.cards.splice(oldItemIndex, 1);
+      newList.cards.splice(newItemIndex, 0, card);
+      await Promise.all([oldList.save(), newList.save()]);
+    }
+
     return true;
   };
 }

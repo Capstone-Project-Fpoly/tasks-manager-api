@@ -58,6 +58,9 @@ class Query {
 
   static getAllCardsByIds = async (ids) => {
     const cards = await CardModel.find({ _id: { $in: ids }, status: "Active" });
+    cards.sort(
+      (a, b) => ids.indexOf(a._id.toString()) - ids.indexOf(b._id.toString())
+    );
     return cards;
   };
 
