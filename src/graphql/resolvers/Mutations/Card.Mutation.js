@@ -60,7 +60,6 @@ class CardService {
       updatedAt: new Date().toISOString(),
     };
 
-    if (input.list !== null) update.list = input.list;
     if (input.title !== null) update.title = input.title;
     if (input.description !== null) update.description = input.description;
     if (input.users !== null) update.users = input.users;
