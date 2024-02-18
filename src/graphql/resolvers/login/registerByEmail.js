@@ -2,6 +2,20 @@ const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../../../models/userSchema");
 const { regexEmail } = require("../Service/regex");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
+async function hashPassword(password) {
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 const registerByEmail = async (args, context) => {
   const input = args.input;
   const email = input.email;
@@ -9,8 +23,12 @@ const registerByEmail = async (args, context) => {
   if (!regexEmail(email)) {
     throw new Error("Email không đúng định dạng");
   }
-  const passWordJWT = jwt.sign({ passWord: passWord }, process.env.KEY);
+  const hashPass = await hashPassword(passWord);
+
+  if (hashPass == null) throw new Error("Lỗi không thể mã hóa password");
+
   const userRecord = await UserModel.findOne({ email: email });
+
   if (!userRecord) {
     const displayName = email.split("@")[0];
     const newUser = await admin.auth().createUser({
@@ -26,7 +44,7 @@ const registerByEmail = async (args, context) => {
       avatar: newUser.photoURL,
       email: newUser.email,
       fullName: newUser.displayName,
-      passWord: passWordJWT,
+      passWord: hashPass,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
@@ -40,10 +58,7 @@ const registerByEmail = async (args, context) => {
     email: email,
     password: passWord,
   });
-  await UserModel.updateOne(
-    { email: email },
-    { $set: { passWord: passWordJWT } }
-  );
+  await UserModel.updateOne({ email: email }, { $set: { passWord: hashPass } });
   const token = jwt.sign({ uid: userRecord.uid }, process.env.KEY);
   return token;
 };
