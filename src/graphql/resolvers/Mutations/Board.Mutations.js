@@ -29,6 +29,11 @@ class BoardMutations {
       $or: [{ ownerUser: user.uid }, { users: user.uid }],
       status: "Active",
     });
+    // hãy sắp xếp lại boards theo thứ tự theo thời gian tạo mới nhất xuống cũ nhất
+    boards.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
     return boards;
   };
   static leaveBoard = async (args, context) => {
