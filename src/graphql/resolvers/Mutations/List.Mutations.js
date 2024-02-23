@@ -96,6 +96,7 @@ class ListMutations {
 
     list.status = "Archived";
     list.updatedAt = new Date().toISOString();
+    list.cards = [];
     await list.save().catch((error) => {
       console.error(error);
       throw new Error("Xóa list thất bại");

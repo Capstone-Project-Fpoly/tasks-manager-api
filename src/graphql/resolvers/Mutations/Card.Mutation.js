@@ -88,6 +88,12 @@ class CardService {
     const cardId = args.idCard;
     const idList = args.idList;
 
+    const list = await ListModel.findById(idList);
+
+    if (!list) {
+      throw new Error("Không tìm thấy thẻ này trong danh sách");
+    }
+
     await CardModel.findOneAndUpdate(
       { _id: cardId },
       { status: "Archived", updatedAt: new Date().toISOString() },
@@ -96,7 +102,6 @@ class CardService {
       throw new Error(err);
     });
 
-    const list = await ListModel.findById(idList);
     list.cards = list.cards.filter((id) => id.toString() !== cardId);
     await list.save().catch((err) => {
       console.log(err);
