@@ -78,21 +78,28 @@ class ListMutations {
     const user = await auth(context.token);
     const idList = args.idList;
 
-    const updatedList = await ListModel.findOneAndUpdate(
-      { _id: idList },
-      {
-        status: "Archived",
-        updatedAt: new Date().toISOString(),
-      },
-      { new: true }
-    ).catch((error) => {
+    const list = await ListModel.findById(idList);
+
+    if (!list) {
+      throw new Error("Không tìm thấy list");
+    }
+
+    const cards = await CardModel.find({ _id: { $in: list.cards } });
+
+    cards.forEach(async (card) => {
+      card.status = "Archived";
+      card.updatedAt = new Date().toISOString();
+      await card.save().catch((error) => {
+        console.error(error);
+      });
+    });
+
+    list.status = "Archived";
+    list.updatedAt = new Date().toISOString();
+    await list.save().catch((error) => {
       console.error(error);
       throw new Error("Xóa list thất bại");
     });
-
-    if (!updatedList) {
-      throw new Error("Không tìm thấy list này");
-    }
 
     return true;
   };

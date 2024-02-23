@@ -64,7 +64,7 @@ type Mutation {
   getCard(idCard: String!): Card
   createCard(idList: String!, title: String!): Card
   updateCard(input: InputUpdateCard!): Card
-  deleteCard(idCard: String!): Boolean
+  deleteCard(idList: String!, idCard: String!): Boolean
   moveList(idBoard: String!, input: InputMoveList!): Boolean
   moveCard(idBoard: String!, input: InputMoveCard!): Boolean
 }

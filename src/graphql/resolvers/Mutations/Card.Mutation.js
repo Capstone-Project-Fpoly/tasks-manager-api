@@ -6,7 +6,9 @@ const auth = require("../authorization");
 class CardService {
   static createCard = async (args, context) => {
     const user = await auth(context.token);
+    const list = await ListModel.findById(args.idList);
     const newCard = new CardModel({
+      boardId: list.board,
       title: args.title,
       reminder: "Unknown",
       createdBy: user.uid,
@@ -19,12 +21,10 @@ class CardService {
       throw new Error(err);
     });
 
-    ListModel.findOneAndUpdate(
-      { _id: args.idList },
-      { $push: { cards: savedCard._id } },
-      { new: true }
-    ).catch((err) => {
-      throw new Error(err);
+    // xong thêm id card vào trường cards của list sau đó save list
+    list.cards.push(savedCard._id);
+    list.save().catch((err) => {
+      console.log(err);
     });
 
     return savedCard;
@@ -86,6 +86,7 @@ class CardService {
   static deleteCard = async (args, context) => {
     const user = await auth(context.token);
     const cardId = args.idCard;
+    const idList = args.idList;
 
     await CardModel.findOneAndUpdate(
       { _id: cardId },
@@ -94,8 +95,16 @@ class CardService {
     ).catch((err) => {
       throw new Error(err);
     });
+
+    const list = await ListModel.findById(idList);
+    list.cards = list.cards.filter((id) => id.toString() !== cardId);
+    await list.save().catch((err) => {
+      console.log(err);
+    });
+
     return true;
   };
+
   static moveCard = async (args, context) => {
     const user = await auth(context.token);
 

@@ -13,6 +13,7 @@ const ReminderEnum = {
 };
 
 const cardSchema = new mongoose.Schema({
+  boardId: { type: String, require: true },
   title: { type: String, require: true },
   description: String,
   users: [String],
