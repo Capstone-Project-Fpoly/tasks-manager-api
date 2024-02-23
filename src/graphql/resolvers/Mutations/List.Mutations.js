@@ -102,6 +102,14 @@ class ListMutations {
       throw new Error("Xóa list thất bại");
     });
 
+    // lấy ra trường board của list, sau đó lấy ra board đó và xóa idList khỏi board.lists
+    const board = await BoardModel.findOne({ lists: idList });
+    board.lists = board.lists.filter((id) => id.toString() !== idList);
+    await board.save().catch((error) => {
+      console.error(error);
+      throw new Error("Xóa list thất bại");
+    });
+
     return true;
   };
 
