@@ -28,6 +28,7 @@ const {
   deleteCard,
   moveCard,
 } = require("./Mutations/Card.Mutation");
+const { getNotifications } = require("./Mutations/Notification.Mutation");
 
 const pubSub = new PubSub();
 
@@ -61,6 +62,8 @@ const resolvers = {
     deleteCard: (_, args, context) => deleteCard(args, context),
     moveList: (_, args, context) => moveList(args, context),
     moveCard: (_, args, context) => moveCard(args, context),
+    notificationCollection: (_, args, context) =>
+      getNotifications(args, context),
   },
   Subscription: {
     test: {
@@ -132,9 +135,8 @@ const resolvers = {
     // },
   },
   Notification: {
-    id: (parent) => parent._id.toString(),
     creater: (parent, args, context) => {
-      return Query.getUserById(parent.user);
+      return Query.getUserById(parent.creater);
     },
   },
 };
