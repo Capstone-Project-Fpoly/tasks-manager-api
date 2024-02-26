@@ -188,13 +188,15 @@ class ListMutations {
     board.lists.splice(newListIndex, 0, removedList);
 
     await board.save().then((board) => {
-      sendNotification(
-        idBoard,
-        user.uid,
-        `${user.fullName} đã di chuyển danh sách "${removedList.label}" trong bảng "${board.title}"`,
-        idBoard,
-        "List"
-      );
+      ListModel.findById(removedList).then((list) => {
+        sendNotification(
+          idBoard,
+          user.uid,
+          `${user.fullName} đã di chuyển danh sách "${list.label}" trong bảng "${board.title}"`,
+          idBoard,
+          "List"
+        );
+      });
     });
 
     return true;

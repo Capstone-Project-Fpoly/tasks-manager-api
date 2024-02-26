@@ -205,8 +205,7 @@ class CardService {
       newList.cards.splice(newItemIndex, 0, card);
       await Promise.all([oldList.save(), newList.save()]);
     }
-
-    CardModel.findById(card._id).then((card) => {
+    CardModel.findById(card).then((card) => {
       sendNotification(
         idBoard,
         user.uid,
