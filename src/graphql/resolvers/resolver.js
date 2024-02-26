@@ -29,6 +29,11 @@ const {
   moveCard,
 } = require("./Mutations/Card.Mutation");
 const { getNotifications } = require("./Mutations/Notification.Mutation");
+const {
+  inviteUsersToBoard,
+  getUsersInviteToBoard,
+  acceptInviteToBoard,
+} = require("./Mutations/User.Mutation");
 
 const pubSub = new PubSub();
 
@@ -36,6 +41,10 @@ const resolvers = {
   Query: {
     getToken: getToken,
     me: me,
+    notificationCollection: (_, args, context) =>
+      getNotifications(args, context),
+    getUsersInviteToBoard: (_, args, context) =>
+      getUsersInviteToBoard(args, context),
   },
   Mutation: {
     loginByGoogle: loginByGoogle,
@@ -62,8 +71,9 @@ const resolvers = {
     deleteCard: (_, args, context) => deleteCard(args, context),
     moveList: (_, args, context) => moveList(args, context),
     moveCard: (_, args, context) => moveCard(args, context),
-    notificationCollection: (_, args, context) =>
-      getNotifications(args, context),
+    inviteUsersToBoard: (_, args, context) => inviteUsersToBoard(args, context),
+    acceptInviteToBoard: (_, args, context) =>
+      acceptInviteToBoard(args, context),
   },
   Subscription: {
     test: {

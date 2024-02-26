@@ -1,6 +1,8 @@
 type Query {
   getToken(email: String!): String
   me: User
+  notificationCollection(idBoard: String): [Notification]
+  getUsersInviteToBoard(idBoard: String!, query: String): [User]
 }
 
 input InputEmail {
@@ -67,7 +69,8 @@ type Mutation {
   deleteCard(idList: String!, idCard: String!): Boolean
   moveList(idBoard: String!, input: InputMoveList!): Boolean
   moveCard(idBoard: String!, input: InputMoveCard!): Boolean
-  notificationCollection(idBoard: String): [Notification]
+  inviteUsersToBoard(idBoard: String!, idUsers: [String!]): Boolean
+  acceptInviteToBoard(idBoard: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -160,4 +163,5 @@ enum TopicNotification {
   Card
   CheckList
   Comment
+  InviteUserToBoard
 }
