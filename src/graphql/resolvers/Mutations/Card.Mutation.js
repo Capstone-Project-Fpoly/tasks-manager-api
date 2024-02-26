@@ -2,6 +2,7 @@ const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
+const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 class CardService {
   static createCard = async (args, context) => {
@@ -25,6 +26,16 @@ class CardService {
     list.cards.push(savedCard._id);
     list.save().catch((err) => {
       console.log(err);
+    });
+
+    BoardModel.findById(list.board).then((board) => {
+      sendNotification(
+        board._id,
+        user.uid,
+        `${user.fullName} đã tạo thẻ mới "${args.title}" ở bảng "${board.title}"`,
+        savedCard._id,
+        "Card"
+      );
     });
 
     return savedCard;
@@ -80,6 +91,15 @@ class CardService {
     if (!updateCard) {
       throw new Error("Không tìm thấy card này");
     }
+    BoardModel.findById(updateCard.boardId).then((board) => {
+      sendNotification(
+        board._id,
+        user.uid,
+        `${user.fullName} đã cập nhật thẻ "${updateCard.title}" trong bảng "${board.title}"`,
+        updateCard._id,
+        "Card"
+      );
+    });
     return updateCard;
   };
 
@@ -94,7 +114,7 @@ class CardService {
       throw new Error("Không tìm thấy thẻ này trong danh sách");
     }
 
-    await CardModel.findOneAndUpdate(
+    const cardUpdate = await CardModel.findOneAndUpdate(
       { _id: cardId },
       { status: "Archived", updatedAt: new Date().toISOString() },
       { new: true }
@@ -105,6 +125,15 @@ class CardService {
     list.cards = list.cards.filter((id) => id.toString() !== cardId);
     await list.save().catch((err) => {
       console.log(err);
+    });
+    BoardModel.findById(list.board).then((board) => {
+      sendNotification(
+        board._id,
+        user.uid,
+        `${user.fullName} đã xóa thẻ "${cardUpdate.title}" trong bảng "${board.title}"`,
+        cardId,
+        "Card"
+      );
     });
 
     return true;
@@ -166,16 +195,26 @@ class CardService {
     ) {
       throw new Error("Index thẻ không hợp lệ");
     }
-
+    let card;
     if (oldListId.toString() === newListId.toString()) {
-      const [card] = oldList.cards.splice(oldItemIndex, 1);
+      [card] = oldList.cards.splice(oldItemIndex, 1);
       oldList.cards.splice(newItemIndex, 0, card);
       await oldList.save();
     } else {
-      const [card] = oldList.cards.splice(oldItemIndex, 1);
+      [card] = oldList.cards.splice(oldItemIndex, 1);
       newList.cards.splice(newItemIndex, 0, card);
       await Promise.all([oldList.save(), newList.save()]);
     }
+
+    CardModel.findById(card._id).then((card) => {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `${user.fullName} đã di chuyển thẻ "${card.title}" trong bảng "${board.title}"`,
+        card._id,
+        "Card"
+      );
+    });
 
     return true;
   };

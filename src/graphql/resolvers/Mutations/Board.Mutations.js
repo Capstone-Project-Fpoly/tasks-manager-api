@@ -1,6 +1,7 @@
 const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
+const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 
 class BoardMutations {
@@ -11,7 +12,7 @@ class BoardMutations {
       isPublic: args.isPublic,
       lists: [],
       createdAt: new Date().toISOString(),
-      users: [],
+      users: [user.uid],
       color: args.color ?? "168CD5",
       ownerUser: user.uid,
       updatedAt: new Date().toISOString(),
@@ -61,6 +62,14 @@ class BoardMutations {
       await CardModel.updateMany(
         { list: { $in: allListIdCards } },
         { $pull: { users: uid } }
+      );
+      sendNotification(
+        idBoard,
+        uid,
+        `${user.fullName} đã rời khỏi bảng ${board.title}`,
+        "Board",
+        idBoard,
+        "Board"
       );
 
       return true;

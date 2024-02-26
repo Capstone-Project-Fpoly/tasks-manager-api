@@ -150,6 +150,7 @@ type Notification {
   title: String!
   content: String!
   topic: TopicNotification!
+  data: String!
 }
 
 enum TopicNotification {
