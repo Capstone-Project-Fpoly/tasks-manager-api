@@ -1,6 +1,7 @@
 const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
+const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 class ListMutations {
   static getLists = async (args, context) => {
@@ -48,9 +49,19 @@ class ListMutations {
       { _id: idBoard },
       { $push: { lists: savedList._id } },
       { new: true }
-    ).catch((err) => {
-      throw new Error(err);
-    });
+    )
+      .catch((err) => {
+        throw new Error(err);
+      })
+      .then((board) => {
+        sendNotification(
+          idBoard,
+          user.uid,
+          `${user.fullName} đã tạo danh sách mới "${label}" ở bảng "${board.title}"`,
+          idBoard,
+          "List"
+        );
+      });
 
     return savedList;
   };
@@ -72,6 +83,21 @@ class ListMutations {
     if (!updatedList) {
       throw new Error("Không tìm thấy list này");
     }
+    // tìm bảng theo trường board trong list
+    BoardModel.findById(updatedList.board)
+      .then((board) => {
+        sendNotification(
+          updatedList.board,
+          user.uid,
+          `${user.fullName} đã cập nhật danh sách "${label}" trong bảng "${board.title}"`,
+          updatedList.board,
+          "List"
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     return updatedList;
   };
   static deleteList = async (args, context) => {
@@ -102,14 +128,23 @@ class ListMutations {
       throw new Error("Xóa list thất bại");
     });
 
-    // lấy ra trường board của list, sau đó lấy ra board đó và xóa idList khỏi board.lists
     const board = await BoardModel.findOne({ lists: idList });
     board.lists = board.lists.filter((id) => id.toString() !== idList);
-    await board.save().catch((error) => {
-      console.error(error);
-      throw new Error("Xóa list thất bại");
-    });
-
+    await board
+      .save()
+      .catch((error) => {
+        console.error(error);
+        throw new Error("Xóa list thất bại");
+      })
+      .then((board) => {
+        sendNotification(
+          board._id,
+          user.uid,
+          `${user.fullName} đã xóa danh sách "${list.label}" trong bảng "${board.title}"`,
+          board._id,
+          "List"
+        );
+      });
     return true;
   };
 
@@ -152,7 +187,15 @@ class ListMutations {
     const [removedList] = board.lists.splice(oldListIndex, 1);
     board.lists.splice(newListIndex, 0, removedList);
 
-    await board.save();
+    await board.save().then((board) => {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `${user.fullName} đã di chuyển danh sách "${removedList.label}" trong bảng "${board.title}"`,
+        idBoard,
+        "List"
+      );
+    });
 
     return true;
   };

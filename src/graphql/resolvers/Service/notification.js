@@ -1,4 +1,6 @@
 const admin = require("firebase-admin");
+const BoardModel = require("../../../models/boardSchema");
+const NotificationModel = require("../../../models/notificationSchema");
 class NotificationService {
   static getDeviceIds = async (uids) => {
     const db = admin.firestore();
@@ -41,6 +43,26 @@ class NotificationService {
       .catch((error) => {
         console.log("Lỗi khi gửi thông báo:", error);
       });
+  };
+  static createNotification = async (idBoard, uid, content, data, topic) => {
+    // truy vấn lấy thông tin board theo id trong mongoese
+    const board = await BoardModel.findOne({ _id: idBoard });
+    // lấy danh sách user trong board
+    const uids = board.users;
+    const notification = new NotificationModel({
+      idBoard: idBoard,
+      data: data,
+      content: content,
+      creater: uid,
+      topic: topic,
+      users: uids,
+      seenListUser: [],
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    });
+    notification.save().catch((err) => {
+      console.log(err);
+    });
   };
 }
 
