@@ -84,6 +84,13 @@ class UserMutations {
     board.save().catch((err) => {
       throw new Error(err);
     });
+    sendNotification(
+      board._id,
+      user.uid,
+      `Người dùng "${user.fullName}" đã tham gia vào bảng "${board.title}"`,
+      "UserJoinBoard",
+      "Board"
+    );
     return true;
   };
 }
