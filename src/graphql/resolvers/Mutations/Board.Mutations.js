@@ -66,7 +66,7 @@ class BoardMutations {
       sendNotification(
         idBoard,
         uid,
-        `${user.fullName} đã rời khỏi bảng ${board.title}`,
+        `${user.fullName} đã rời khỏi bảng "${board.title}"`,
         "Board",
         idBoard,
         "Board"
