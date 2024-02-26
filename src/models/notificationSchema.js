@@ -7,7 +7,14 @@ const notificationSchema = new mongoose.Schema({
   creater: { type: String, require: true },
   topic: {
     type: String,
-    enum: ["Board", "List", "Card", "CheckList", "Comment"],
+    enum: [
+      "Board",
+      "List",
+      "Card",
+      "CheckList",
+      "Comment",
+      "InviteUserToBoard",
+    ],
   },
   users: { type: [String], require: true },
   seenListUser: { type: [String], require: true },

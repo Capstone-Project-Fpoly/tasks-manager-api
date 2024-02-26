@@ -12,6 +12,7 @@ const boardSchema = new mongoose.Schema({
     enum: ["Active", "Archived", "Deleted"],
     default: "Active",
   },
+  inviteUsers: [String],
   updatedAt: { type: String, required: true },
   createdAt: { type: String, required: true },
 });

@@ -44,7 +44,13 @@ class NotificationService {
         console.log("Lỗi khi gửi thông báo:", error);
       });
   };
-  static createNotification = async (idBoard, uid, content, data, topic) => {
+  static createNotification = async (
+    idBoard,
+    creater,
+    content,
+    data,
+    topic
+  ) => {
     // truy vấn lấy thông tin board theo id trong mongoese
     const board = await BoardModel.findOne({ _id: idBoard });
     // lấy danh sách user trong board
@@ -53,7 +59,30 @@ class NotificationService {
       idBoard: idBoard,
       data: data,
       content: content,
-      creater: uid,
+      creater: creater,
+      topic: topic,
+      users: uids,
+      seenListUser: [],
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    });
+    notification.save().catch((err) => {
+      console.log(err);
+    });
+  };
+
+  // tạo 1 hàm tạo notification cho trường hợp người dùng thêm người dùng vào bảng
+  static createNotificationForInviteUser = async (
+    creater,
+    content,
+    data,
+    topic,
+    uids
+  ) => {
+    const notification = new NotificationModel({
+      data: data,
+      content: content,
+      creater: creater,
       topic: topic,
       users: uids,
       seenListUser: [],

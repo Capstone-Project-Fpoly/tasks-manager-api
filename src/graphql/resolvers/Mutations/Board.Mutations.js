@@ -16,6 +16,7 @@ class BoardMutations {
       color: args.color ?? "168CD5",
       ownerUser: user.uid,
       updatedAt: new Date().toISOString(),
+      inviteUsers: [],
       status: "Active",
     });
     board.save().catch((err) => {
