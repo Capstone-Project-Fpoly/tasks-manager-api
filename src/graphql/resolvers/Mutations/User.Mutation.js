@@ -8,6 +8,7 @@ const {
   send,
 } = require("../Service/notification");
 const BoardModel = require("../../../models/boardSchema");
+const NotificationModel = require("../../../models/notificationSchema");
 
 const sendNotificationForInviteUser = async (idBoard, creater, users) => {
   try {
@@ -71,6 +72,7 @@ class UserMutations {
   static acceptInviteToBoard = async (args, context) => {
     const user = await auth(context.token);
     const boardId = args.idBoard;
+    const idNotification = args.idNotification;
     const board = await BoardModel.findById(boardId);
     if (!board) throw new Error("Không tìm thấy bảng này");
     if (!board.inviteUsers)
@@ -81,9 +83,16 @@ class UserMutations {
       throw new Error("Bạn đã có trong bảng này");
     board.inviteUsers = board.inviteUsers.filter((id) => id !== user.uid);
     board.users.push(user.uid);
-    board.save().catch((err) => {
-      throw new Error(err);
-    });
+    await board
+      .save()
+      .catch((err) => {
+        throw new Error(err);
+      })
+      .then(() => {
+        NotificationModel.findByIdAndDelete(idNotification).catch((err) => {
+          throw new Error(err);
+        });
+      });
     sendNotification(
       board._id,
       user.uid,
