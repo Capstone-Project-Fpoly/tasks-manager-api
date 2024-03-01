@@ -3,6 +3,7 @@ type Query {
   me: User
   notificationCollection(idBoard: String): [Notification]
   getUsersInviteToBoard(idBoard: String!, query: String): [User]
+  getUsersOfBoard(idBoard: String!, query: String): [User]
 }
 
 input InputEmail {

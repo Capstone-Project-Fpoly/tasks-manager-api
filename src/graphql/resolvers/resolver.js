@@ -34,6 +34,7 @@ const {
   getUsersInviteToBoard,
   acceptInviteToBoard,
 } = require("./Mutations/User.Mutation");
+const { getUsersOfBoard } = require("./Queres/User.Queries");
 
 const pubSub = new PubSub();
 
@@ -45,6 +46,7 @@ const resolvers = {
       getNotifications(args, context),
     getUsersInviteToBoard: (_, args, context) =>
       getUsersInviteToBoard(args, context),
+    getUsersOfBoard: (_, args, context) => getUsersOfBoard(args, context),
   },
   Mutation: {
     loginByGoogle: loginByGoogle,
