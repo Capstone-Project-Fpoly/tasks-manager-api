@@ -36,7 +36,7 @@ class UserMutations {
     if (!board) throw new Error("Không tìm thấy bảng này");
     const users = await UserModel.find({
       $and: [
-        { _id: { $nin: board.members } },
+        { uid: { $nin: board.members } },
         {
           $or: [
             { email: { $regex: query, $options: "i" } },
