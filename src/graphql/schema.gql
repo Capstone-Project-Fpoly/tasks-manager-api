@@ -70,7 +70,7 @@ type Mutation {
   moveList(idBoard: String!, input: InputMoveList!): Boolean
   moveCard(idBoard: String!, input: InputMoveCard!): Boolean
   inviteUsersToBoard(idBoard: String!, idUsers: [String!]): Boolean
-  acceptInviteToBoard(idBoard: String!): Boolean
+  acceptInviteToBoard(idNotification: String!, idBoard: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
