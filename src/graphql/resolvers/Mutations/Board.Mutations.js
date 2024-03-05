@@ -44,6 +44,10 @@ class BoardMutations {
       const uid = user.uid;
       const idBoard = args.idBoard;
       const board = await BoardModel.findOne({ _id: idBoard });
+      // nếu user là chủ bảng thì không thể rời bảng
+      if (board.ownerUser === uid) {
+        throw new Error("Bạn không thể rời bảng khi bạn là người tạo bảng");
+      }
       if (board.users != 0) {
         await BoardModel.updateOne({ _id: idBoard }, { $pull: { users: uid } });
       }
@@ -78,6 +82,31 @@ class BoardMutations {
       console.log(error);
       return false;
     }
+  };
+  static updateBoard = async (args, context) => {
+    const user = await auth(context.token);
+    const idBoard = args.idBoard;
+    const input = args.input;
+    const color = input.color;
+    const title = input.title;
+    const isPublic = input.isPublic;
+    const board = await BoardModel.findOne({ _id: idBoard });
+    if (board.ownerUser !== user.uid) {
+      throw new Error("Bạn không có quyền sửa bảng này");
+    }
+    const updateNewBoard = await BoardModel.findOneAndUpdate(
+      { _id: idBoard },
+      {
+        ...(color && { color }),
+        ...(title && { title }),
+        ...(isPublic && { isPublic }),
+        updatedAt: new Date().toISOString(),
+      },
+      { new: true }
+    ).catch((err) => {
+      throw new Error(err);
+    });
+    return updateNewBoard;
   };
 }
 

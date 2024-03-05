@@ -49,6 +49,12 @@ input InputMoveCard {
   newListIndex: Int!
 }
 
+input InputUpdateBoard {
+  title: String
+  color: String
+  isPublic: Boolean
+}
+
 type Mutation {
   loginByGoogle(input: InputLogin!): String
   loginByEmail(input: InputLogin!): String
@@ -73,6 +79,7 @@ type Mutation {
   inviteUsersToBoard(idBoard: String!, idUsers: [String!]): Boolean
   acceptInviteToBoard(idNotification: String!, idBoard: String!): Boolean
   seenNotification(idNotification: String!): Boolean
+  updateBoard(idBoard: String!, input: InputUpdateBoard!): Board
 }
 type Subscription {
   test(id: String!): String
