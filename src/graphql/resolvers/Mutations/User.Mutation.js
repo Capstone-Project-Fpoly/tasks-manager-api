@@ -34,7 +34,7 @@ class UserMutations {
     const query = args.query;
     const board = await BoardModel.findById(boardId);
     if (!board) throw new Error("Không tìm thấy bảng này");
-    
+
     const users = await UserModel.find({
       $and: [
         { uid: { $nin: board.users } },
@@ -99,7 +99,7 @@ class UserMutations {
       board._id,
       user.uid,
       `Người dùng "${user.fullName}" đã tham gia vào bảng "${board.title}"`,
-      "UserJoinBoard",
+      board._id,
       "Board"
     );
     return true;
