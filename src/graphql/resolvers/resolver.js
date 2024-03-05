@@ -28,7 +28,10 @@ const {
   deleteCard,
   moveCard,
 } = require("./Mutations/Card.Mutation");
-const { getNotifications } = require("./Mutations/Notification.Mutation");
+const {
+  getNotifications,
+  seenNotification,
+} = require("./Mutations/Notification.Mutation");
 const {
   inviteUsersToBoard,
   getUsersInviteToBoard,
@@ -76,6 +79,7 @@ const resolvers = {
     inviteUsersToBoard: (_, args, context) => inviteUsersToBoard(args, context),
     acceptInviteToBoard: (_, args, context) =>
       acceptInviteToBoard(args, context),
+    seenNotification: (_, args, context) => seenNotification(args, context),
   },
   Subscription: {
     test: {

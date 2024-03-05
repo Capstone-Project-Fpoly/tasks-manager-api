@@ -54,6 +54,22 @@ class NotificationMutations {
     );
     return notifications;
   };
+
+  static seenNotification = async (args, context) => {
+    const user = await auth(context.token);
+    const idNotification = args.idNotification;
+    const notification = await NotificationModel.findById(idNotification);
+    if (!notification) throw new Error("Không tìm thấy thông báo này");
+    if (!notification.users.includes(user.uid)) {
+      throw new Error("Không có quyền truy cập thông báo này");
+    }
+    if (notification.seenListUser.includes(user.uid)) {
+      throw new Error("Thông báo này đã được đánh dấu là đã đọc");
+    }
+    notification.seenListUser.push(user.uid);
+    await notification.save();
+    return true;
+  };
 }
 
 module.exports = NotificationMutations;

@@ -72,6 +72,7 @@ type Mutation {
   moveCard(idBoard: String!, input: InputMoveCard!): Boolean
   inviteUsersToBoard(idBoard: String!, idUsers: [String!]): Boolean
   acceptInviteToBoard(idNotification: String!, idBoard: String!): Boolean
+  seenNotification(idNotification: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
