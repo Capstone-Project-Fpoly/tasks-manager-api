@@ -61,7 +61,7 @@ class BoardMutations {
 
       if (allListIdCards.length == 0) return true;
       await CardModel.updateMany(
-        { list: { $in: allListIdCards } },
+        { _id: { $in: allListIdCards } },
         { $pull: { users: uid } }
       );
       sendNotification(
