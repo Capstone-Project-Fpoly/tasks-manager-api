@@ -7,6 +7,7 @@ const {
   createBoard,
   getBoards,
   leaveBoard,
+  updateBoard,
 } = require("./Mutations/Board.Mutations");
 const loginByEMail = require("./login/loginByEmail");
 const registerByEmail = require("./login/registerByEmail");
@@ -80,6 +81,7 @@ const resolvers = {
     acceptInviteToBoard: (_, args, context) =>
       acceptInviteToBoard(args, context),
     seenNotification: (_, args, context) => seenNotification(args, context),
+    updateBoard: (_, args, context) => updateBoard(args, context),
   },
   Subscription: {
     test: {
