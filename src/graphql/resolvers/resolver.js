@@ -153,8 +153,8 @@ const resolvers = {
     // },
   },
   Notification: {
-    creater: (parent, args, context) => {
-      return Query.getUserById(parent.creater);
+    creator: (parent, args, context) => {
+      return Query.getUserById(parent.creator);
     },
   },
 };

@@ -4,7 +4,7 @@ const notificationSchema = new mongoose.Schema({
   idBoard: { type: String, require: true },
   data: { type: String, require: true },
   content: { type: String, require: true },
-  creater: { type: String, require: true },
+  creator: { type: String, require: true },
   topic: {
     type: String,
     enum: [

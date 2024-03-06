@@ -159,7 +159,7 @@ type Notification {
   id: String!
   createdAt: String!
   is_seen: Boolean!
-  creater: User!
+  creator: User!
   title: String!
   content: String!
   topic: TopicNotification!
