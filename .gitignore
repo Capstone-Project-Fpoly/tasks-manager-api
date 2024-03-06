@@ -69,3 +69,4 @@ dist/
 # Temporary folder for builds
 build/
 .vercel
+key-google-analytics

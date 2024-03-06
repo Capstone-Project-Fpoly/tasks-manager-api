@@ -10,12 +10,12 @@ const {
 const BoardModel = require("../../../models/boardSchema");
 const NotificationModel = require("../../../models/notificationSchema");
 
-const sendNotificationForInviteUser = async (idBoard, creater, users) => {
+const sendNotificationForInviteUser = async (idBoard, creator, users) => {
   try {
     const board = await BoardModel.findOne({ _id: idBoard });
     const deviceIds = await getDeviceIds(users);
     await createNotificationForInviteUser(
-      creater,
+      creator,
       `Bạn đã được mời vào bảng ${board.title}`,
       idBoard,
       "InviteUserToBoard",

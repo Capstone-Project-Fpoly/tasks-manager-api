@@ -46,7 +46,7 @@ class NotificationService {
   };
   static createNotification = async (
     idBoard,
-    creater,
+    creator,
     content,
     data,
     topic
@@ -59,7 +59,7 @@ class NotificationService {
       idBoard: idBoard,
       data: data,
       content: content,
-      creater: creater,
+      creator: creator,
       topic: topic,
       users: uids,
       seenListUser: [],
@@ -73,7 +73,7 @@ class NotificationService {
 
   // tạo 1 hàm tạo notification cho trường hợp người dùng thêm người dùng vào bảng
   static createNotificationForInviteUser = async (
-    creater,
+    creator,
     content,
     data,
     topic,
@@ -82,7 +82,7 @@ class NotificationService {
     const notification = new NotificationModel({
       data: data,
       content: content,
-      creater: creater,
+      creator: creator,
       topic: topic,
       users: uids,
       seenListUser: [],

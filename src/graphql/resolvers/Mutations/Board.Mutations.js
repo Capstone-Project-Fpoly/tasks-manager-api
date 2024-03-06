@@ -1,6 +1,7 @@
 const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
+const NotificationModel = require("../../../models/notificationSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 

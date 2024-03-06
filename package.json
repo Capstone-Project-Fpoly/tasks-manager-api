@@ -9,6 +9,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@google-analytics/data": "^4.4.0",
     "apollo-server": "^3.13.0",
     "apollo-server-errors": "^3.3.1",
     "apollo-server-express": "^3.13.0",
@@ -26,10 +27,12 @@
     "graphql-tag": "^2.12.6",
     "graphql-tools": "^9.0.0",
     "graphql-yoga": "^5.1.1",
+    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.2",
+    "npm": "^10.5.0",
     "subscriptions-transport-ws": "^0.11.0"
   }
 }

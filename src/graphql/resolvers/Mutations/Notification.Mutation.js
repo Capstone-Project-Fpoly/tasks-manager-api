@@ -7,11 +7,18 @@ const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 
 const getAllNotifications = async (uid) => {
-  const notifications = await NotificationModel.find({ users: uid });
+  const notifications = await NotificationModel.find({ users: uid }).sort({
+    createdAt: -1,
+  });
   return notifications;
 };
 const getNotificationsOfBoard = async (idBoard) => {
-  const notifications = await NotificationModel.find({ idBoard: idBoard });
+  const notifications = await NotificationModel.find({
+    idBoard: idBoard,
+    topic: { $ne: "InviteUserToBoard" },
+  }).sort({
+    createdAt: -1,
+  });
   return notifications;
 };
 
@@ -22,7 +29,7 @@ const formattedNotification = async (uid, notifications) => {
         id: notification._id,
         createdAt: notification.createdAt,
         is_seen: notification.seenListUser.includes(uid),
-        creater: notification.creater,
+        creator: notification.creator,
         title: "Thông báo",
         content: notification.content,
         topic: notification.topic,
