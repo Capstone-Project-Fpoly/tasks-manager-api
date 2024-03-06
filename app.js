@@ -19,6 +19,7 @@ const typeDefs = gql(
 );
 const port = process.env.PORT || 3000;
 const admin = require("firebase-admin");
+const route = require("./src/route/app");
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -86,6 +87,7 @@ const startServer = async () => {
     const indexPath = path.join(__dirname, "index.html");
     res.sendFile(indexPath);
   });
+  route(app);
   httpServer.listen(port, () => {
     console.log(
       `Server ready at http://localhost:${port}${server.graphqlPath}`

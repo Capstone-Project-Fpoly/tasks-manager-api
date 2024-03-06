@@ -13,11 +13,12 @@ const getAllNotifications = async (uid) => {
   return notifications;
 };
 const getNotificationsOfBoard = async (idBoard) => {
-  const notifications = await NotificationModel.find({ idBoard: idBoard }).sort(
-    {
-      createdAt: -1,
-    }
-  );
+  const notifications = await NotificationModel.find({
+    idBoard: idBoard,
+    topic: { $ne: "InviteUserToBoard" },
+  }).sort({
+    createdAt: -1,
+  });
   return notifications;
 };
 
