@@ -14,6 +14,7 @@ const notificationSchema = new mongoose.Schema({
       "CheckList",
       "Comment",
       "InviteUserToBoard",
+      "RemoveUserFromBoard",
     ],
   },
   users: { type: [String], require: true },

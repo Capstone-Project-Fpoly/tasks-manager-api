@@ -72,7 +72,29 @@ class NotificationService {
   };
 
   // tạo 1 hàm tạo notification cho trường hợp người dùng thêm người dùng vào bảng
-  static createNotificationForInviteUser = async (
+  static createNotificationModelForInviteUser = async (
+    creator,
+    content,
+    data,
+    topic,
+    uids
+  ) => {
+    const notification = new NotificationModel({
+      data: data,
+      content: content,
+      creator: creator,
+      topic: topic,
+      users: uids,
+      seenListUser: [],
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    });
+    notification.save().catch((err) => {
+      console.log(err);
+    });
+  };
+
+  static createNotificationModelForRemoveUser = async (
     creator,
     content,
     data,

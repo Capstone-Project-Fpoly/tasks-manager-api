@@ -80,6 +80,7 @@ type Mutation {
   acceptInviteToBoard(idNotification: String!, idBoard: String!): Boolean
   seenNotification(idNotification: String!): Boolean
   updateBoard(idBoard: String!, input: InputUpdateBoard!): Board
+  removeUserFromBoard(idBoard: String!, uid: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -173,4 +174,5 @@ enum TopicNotification {
   CheckList
   Comment
   InviteUserToBoard
+  RemoveUserFromBoard
 }
