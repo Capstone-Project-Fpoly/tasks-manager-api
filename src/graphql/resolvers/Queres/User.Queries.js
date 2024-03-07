@@ -3,7 +3,7 @@ const sendNotification = require("../Service/sendNotification");
 const auth = require("../authorization");
 const UserModel = require("../../../models/userSchema");
 const {
-  createNotificationForInviteUser,
+  createNotificationModelForInviteUser: createNotificationForInviteUser,
   getDeviceIds,
   send,
 } = require("../Service/notification");
