@@ -21,6 +21,7 @@ const sendNotificationForInviteUser = async (idBoard, creator, users) => {
       "InviteUserToBoard",
       users
     );
+    if (deviceIds == null || deviceIds.length == 0) return;
     send(deviceIds, `Bạn đã được mời vào bảng "${board.title}"`);
   } catch (err) {
     console.log(err);
