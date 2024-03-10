@@ -3,6 +3,7 @@ const BoardModel = require("../../../models/boardSchema");
 const NotificationModel = require("../../../models/notificationSchema");
 class NotificationService {
   static getDeviceIds = async (uids) => {
+    if (uids || uids.length === 0) return [];
     const db = admin.firestore();
     let deviceIds = [];
 
