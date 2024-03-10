@@ -131,6 +131,13 @@ class BoardMutations {
     ).catch((err) => {
       throw new Error(err);
     });
+    sendNotification(
+      idBoard,
+      user.uid,
+      `${user.fullName} đã cập nhật bảng "${board.title}"`,
+      idBoard,
+      "Board"
+    );
     return updateNewBoard;
   };
 
