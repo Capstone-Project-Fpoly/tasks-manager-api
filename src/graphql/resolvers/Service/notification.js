@@ -24,13 +24,14 @@ class NotificationService {
     }
     return deviceIds;
   };
-  static send = async (deviceIds, notificationBody) => {
+  static send = async (deviceIds, notificationBody = "") => {
     if (deviceIds.length === 0 || !deviceIds) return;
     const tokens = deviceIds.map((token) => token);
+    const body = notificationBody.replace(/\*\*/g, "");
     const message = {
       notification: {
         title: "Thông báo",
-        body: notificationBody,
+        body: body,
       },
       tokens: tokens,
     };
