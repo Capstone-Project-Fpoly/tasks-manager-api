@@ -59,7 +59,7 @@ type Mutation {
   loginByGoogle(input: InputLogin!): String
   loginByEmail(input: InputLogin!): String
   registerByEmail(input: InputEmail!): String
-  testCallSubscription: String
+  testCallSubscription(name: String): String
   createBoard(title: String!, color: String, isPublic: Boolean!): Board
   getBoards: [Board]
   leaveBoard(idBoard: String!): Boolean

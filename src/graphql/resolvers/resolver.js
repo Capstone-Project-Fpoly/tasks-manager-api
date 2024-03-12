@@ -40,6 +40,7 @@ const {
   acceptInviteToBoard,
 } = require("./Mutations/User.Mutation");
 const { getUsersOfBoard } = require("./Queres/User.Queries");
+const { testSubscription } = require("./subscriptions/testSubscription");
 
 const pubSub = new PubSub();
 
@@ -55,8 +56,8 @@ const resolvers = {
   },
   Mutation: {
     loginByGoogle: loginByGoogle,
-    testCallSubscription: () =>
-      pubSub.publish("123", { abc: "mmmm", ayx: "hhhhh" }),
+    testCallSubscription: (parent, args, context) =>
+      testSubscription(args, context, pubSub),
     createBoard: (parent, args, context) => createBoard(args, context),
     getBoards: (parent, args, context) => getBoards(args, context),
     leaveBoard: (_, args, context) => leaveBoard(args, context),

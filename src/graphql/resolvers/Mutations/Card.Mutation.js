@@ -32,7 +32,7 @@ class CardService {
       sendNotification(
         board._id,
         user.uid,
-        `${user.fullName} đã tạo thẻ mới "${args.title}" ở bảng "${board.title}"`,
+        `**${user.fullName}** đã tạo thẻ mới **${args.title}** ở bảng **${board.title}**`,
         savedCard._id,
         "Card"
       );
@@ -95,7 +95,7 @@ class CardService {
       sendNotification(
         board._id,
         user.uid,
-        `${user.fullName} đã cập nhật thẻ "${updateCard.title}" trong bảng "${board.title}"`,
+        `**${user.fullName}** đã cập nhật thẻ **${updateCard.title}** trong bảng **${board.title}**`,
         updateCard._id,
         "Card"
       );
@@ -130,7 +130,7 @@ class CardService {
       sendNotification(
         board._id,
         user.uid,
-        `${user.fullName} đã xóa thẻ "${cardUpdate.title}" trong bảng "${board.title}"`,
+        `**${user.fullName}** đã xóa thẻ **${cardUpdate.title}** trong bảng **${board.title}**`,
         cardId,
         "Card"
       );
@@ -209,7 +209,7 @@ class CardService {
       sendNotification(
         idBoard,
         user.uid,
-        `${user.fullName} đã di chuyển thẻ "${card.title}" trong bảng "${board.title}"`,
+        `**${user.fullName}** đã di chuyển thẻ **${card.title}** trong bảng **${board.title}**`,
         card._id,
         "Card"
       );

@@ -57,7 +57,7 @@ class ListMutations {
         sendNotification(
           idBoard,
           user.uid,
-          `${user.fullName} đã tạo danh sách mới "${label}" ở bảng "${board.title}"`,
+          `**${user.fullName}** đã tạo danh sách mới **${label}** ở bảng **${board.title}**`,
           idBoard,
           "List"
         );
@@ -89,7 +89,7 @@ class ListMutations {
         sendNotification(
           updatedList.board,
           user.uid,
-          `${user.fullName} đã cập nhật danh sách "${label}" trong bảng "${board.title}"`,
+          `**${user.fullName}** đã cập nhật danh sách **${label}** trong bảng **${board.title}**`,
           updatedList.board,
           "List"
         );
@@ -140,7 +140,7 @@ class ListMutations {
         sendNotification(
           board._id,
           user.uid,
-          `${user.fullName} đã xóa danh sách "${list.label}" trong bảng "${board.title}"`,
+          `**${user.fullName}** đã xóa danh sách **${list.label}** trong bảng **${board.title}**`,
           board._id,
           "List"
         );
@@ -192,7 +192,7 @@ class ListMutations {
         sendNotification(
           idBoard,
           user.uid,
-          `${user.fullName} đã di chuyển danh sách "${list.label}" trong bảng "${board.title}"`,
+          `**${user.fullName}** đã di chuyển danh sách **${list.label}** trong bảng **${board.title}**`,
           idBoard,
           "List"
         );

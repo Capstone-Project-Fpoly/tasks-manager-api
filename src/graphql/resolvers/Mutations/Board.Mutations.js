@@ -17,14 +17,14 @@ const sendNotificationForRemoveUser = async (idBoard, creator, users) => {
     const deviceIds = await getDeviceIds(users);
     await createNotificationModelForRemoveUser(
       creator.uid,
-      `${creator.fullName} đã xóa bạn khỏi bảng "${board.title}"`,
+      `**${creator.fullName}** đã xóa bạn khỏi bảng **${board.title}**`,
       idBoard,
       "RemoveUserFromBoard",
       users
     );
     if (deviceIds == null || deviceIds.length == 0) return;
     console.log("deviceIds", deviceIds);
-    send(deviceIds, `Bạn đã được mời vào bảng "${board.title}"`);
+    send(deviceIds, `**Bạn** đã được mời vào bảng **${board.title}**`);
   } catch (err) {
     console.log(err);
   }
