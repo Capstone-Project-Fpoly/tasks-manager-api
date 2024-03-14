@@ -1,6 +1,6 @@
 const { PubSub } = require("graphql-subscriptions");
 const pubSub = new PubSub();
-module.exports = ({ req }) => {
+module.exports = async ({ req }) => {
   const authorization = req.headers.authorization;
   if (!authorization) return null;
   if (!authorization && !authorization.startsWith("Bearer ")) return null;
