@@ -1,7 +1,10 @@
 const { createServer } = require("http");
 const express = require("express");
 const { ApolloServer } = require("@apollo/server");
-const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
+const {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} = require("apollo-server-core");
 
 const { startStandaloneServer } = require("@apollo/server/standalone");
 
@@ -70,6 +73,7 @@ const startServer = async () => {
     schema,
     context,
     plugins: [
+      ApolloServerPluginLandingPageLocalDefault(),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         async serverWillStart() {
