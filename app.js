@@ -3,7 +3,7 @@ const express = require("express");
 const { ApolloServer } = require("@apollo/server");
 const {
   ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageDisabled,
 } = require("apollo-server-core");
 
 const { startStandaloneServer } = require("@apollo/server/standalone");
@@ -73,7 +73,7 @@ const startServer = async () => {
     schema,
     context,
     plugins: [
-      ApolloServerPluginLandingPageLocalDefault(),
+      ApolloServerPluginLandingPageDisabled(),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         async serverWillStart() {
