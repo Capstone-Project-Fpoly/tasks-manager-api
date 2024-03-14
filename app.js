@@ -3,7 +3,6 @@ const express = require("express");
 const { ApolloServer } = require("@apollo/server");
 const {
   ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("apollo-server-core");
 
 const { startStandaloneServer } = require("@apollo/server/standalone");
@@ -75,7 +74,6 @@ const startServer = async () => {
     introspection: true,
     playground: true, 
     plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         async serverWillStart() {
