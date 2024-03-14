@@ -68,6 +68,7 @@ const startServer = async () => {
 
   const server = new ApolloServer({
     schema,
+    context,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {

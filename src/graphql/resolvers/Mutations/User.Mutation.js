@@ -16,7 +16,7 @@ const sendNotificationForInviteUser = async (idBoard, creator, users) => {
     const deviceIds = await getDeviceIds(users);
     await createNotificationForInviteUser(
       creator,
-      `Bạn đã được mời vào bảng ${board.title}`,
+      `**Bạn** đã được mời vào bảng **${board.title}**`,
       idBoard,
       "InviteUserToBoard",
       users
@@ -99,7 +99,7 @@ class UserMutations {
     sendNotification(
       board._id,
       user.uid,
-      `Người dùng "${user.fullName}" đã tham gia vào bảng "${board.title}"`,
+      `Người dùng **${user.fullName}** đã tham gia vào bảng **${board.title}**`,
       board._id,
       "Board"
     );
