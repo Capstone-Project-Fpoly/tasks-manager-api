@@ -72,6 +72,8 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema,
     context,
+    introspection: true,
+    playground: true, 
     plugins: [
       ApolloServerPluginLandingPageDisabled(),
       ApolloServerPluginDrainHttpServer({ httpServer }),
