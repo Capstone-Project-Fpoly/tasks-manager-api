@@ -1,12 +1,10 @@
 const { createServer } = require("http");
-const { execute, subscribe } = require("graphql");
-const { SubscriptionServer } = require("subscriptions-transport-ws");
-const { makeExecutableSchema } = require("graphql-tools");
 const express = require("express");
-const { ApolloServer } = require("apollo-server-express");
-const {
-  ApolloServerPluginLandingPageGraphQLPlayground,
-} = require("apollo-server-core");
+const { ApolloServer } = require("@apollo/server");
+const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
+
+const { startStandaloneServer } = require("@apollo/server/standalone");
+
 const fs = require("fs");
 const gql = require("graphql-tag");
 const resolvers = require("./src/graphql/resolvers/resolver");
@@ -20,6 +18,15 @@ const typeDefs = gql(
 const port = process.env.PORT || 3000;
 const admin = require("firebase-admin");
 const route = require("./src/route/app");
+//
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { WebSocketServer } = require("ws");
+const { useServer } = require("graphql-ws/lib/use/ws");
+const cors = require("cors");
+const { expressMiddleware } = require("@apollo/server/express4");
+const { PubSub } = require("graphql-subscriptions");
+const { log } = require("console");
+const { isContext } = require("vm");
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -43,45 +50,48 @@ const startServer = async () => {
   const httpServer = createServer(app);
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/graphql",
+    handleProtocols: (protocols, req) => {
+      return "graphql-ws";
+    },
+  });
+
+  const serverCleanup = useServer(
+    {
+      schema,
+      context: async (ctx, msg, args) => {},
+    },
+    wsServer
+  );
+
   const server = new ApolloServer({
     schema,
     plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
+      ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         async serverWillStart() {
           return {
             async drainServer() {
-              subscriptionServer.close();
+              serverCleanup.dispose();
             },
           };
         },
       },
     ],
-    subscriptions: {
-      onConnect: (connectionParams, webSocket, context) => {
-        console.log("đã kết nói websocket");
-        console.log(connectionParams, webSocket, context);
-      },
-    },
-    introspection: true,
-    persistedQueries: false,
-    context: context,
   });
   await server.start();
 
-  server.applyMiddleware({ app });
-
-  const subscriptionServer = SubscriptionServer.create(
-    {
-      schema,
-      execute,
-      subscribe,
-    },
-    {
-      server: httpServer,
-      path: "/graphql",
-    }
+  app.use(
+    "/graphql",
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: context,
+    })
   );
+
   app.use(express.static(path.join(__dirname, "public")));
   app.get("/", (req, res) => {
     const indexPath = path.join(__dirname, "index.html");
@@ -89,9 +99,7 @@ const startServer = async () => {
   });
   route(app);
   httpServer.listen(port, () => {
-    console.log(
-      `Server ready at http://localhost:${port}${server.graphqlPath}`
-    );
+    console.log(`Server ready at http://localhost:${port}/graphql`);
     console.log(`Subscriptions ready at ws://localhost:${port}/graphql`);
   });
 };

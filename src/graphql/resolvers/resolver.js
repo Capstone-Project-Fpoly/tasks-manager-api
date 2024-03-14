@@ -89,6 +89,7 @@ const resolvers = {
   Subscription: {
     test: {
       subscribe: (parent, args, context, info) => {
+        console.log("args", args);
         return pubSub.asyncIterator(args.id);
       },
       resolve: (payload, args, context, info) => {
