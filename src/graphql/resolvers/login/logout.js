@@ -1,4 +1,4 @@
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 const admin = require("firebase-admin");
 
 module.exports = async (context) => {

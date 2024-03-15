@@ -3,7 +3,7 @@ const CardModel = require("../../../models/cardShema");
 const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 class CardService {
   static createCard = async (args, context) => {
     const user = await auth(context.token);

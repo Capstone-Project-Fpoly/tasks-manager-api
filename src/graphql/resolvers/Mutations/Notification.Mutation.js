@@ -4,7 +4,7 @@ const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
 const NotificationModel = require("../../../models/notificationSchema");
 const sendNotification = require("../Service/sendNotification");
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 
 const getAllNotifications = async (uid) => {
   const notifications = await NotificationModel.find({ users: uid }).sort({
