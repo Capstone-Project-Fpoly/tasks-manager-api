@@ -2,7 +2,7 @@ const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 class ListMutations {
   static getLists = async (args, context) => {
     const user = await auth(context.token);

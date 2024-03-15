@@ -2,19 +2,7 @@ const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../../../models/userSchema");
 const { regexEmail } = require("../Service/regex");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-
-async function hashPassword(password) {
-  try {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+const hashText = require("../../../utils/hash-text");
 
 const registerByEmail = async (args, context) => {
   const input = args.input;
@@ -23,7 +11,7 @@ const registerByEmail = async (args, context) => {
   if (!regexEmail(email)) {
     throw new Error("Email không đúng định dạng");
   }
-  const hashPass = await hashPassword(passWord);
+  const hashPass = await hashText(passWord);
 
   if (hashPass == null) throw new Error("Lỗi không thể mã hóa password");
 

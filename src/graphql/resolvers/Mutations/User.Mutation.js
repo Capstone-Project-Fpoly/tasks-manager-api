@@ -1,6 +1,6 @@
 const { get } = require("mongoose");
 const sendNotification = require("../Service/sendNotification");
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 const UserModel = require("../../../models/userSchema");
 const {
   createNotificationModelForInviteUser: createNotificationForInviteUser,

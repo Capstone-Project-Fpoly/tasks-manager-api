@@ -4,7 +4,7 @@ const CheckListModel = require("../../../models/checkListShema");
 const CommentModel = require("../../../models/commentSchema");
 const ListModel = require("../../../models/listSchema");
 const UserModel = require("../../../models/userSchema");
-const auth = require("../authorization");
+const auth = require("../../../auth/authorization");
 
 class Query {
   static getUserById = async (uid) => {

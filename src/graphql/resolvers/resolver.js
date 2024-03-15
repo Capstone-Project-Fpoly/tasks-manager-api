@@ -23,7 +23,7 @@ const {
   moveList,
 } = require("./Mutations/List.Mutations");
 
-const auth = require("./authorization");
+const auth = require("../../auth/authorization");
 const {
   updateCard,
   createCard,
@@ -40,7 +40,8 @@ const {
   acceptInviteToBoard,
 } = require("./Mutations/User.Mutation");
 const { getUsersOfBoard } = require("./Queres/User.Queries");
-const { testSubscription } = require("./subscriptions/testSubscription");
+const { testSubscription } = require("./Mutations/testSubscription");
+const test = require("./subscriptions/test");
 
 const pubSub = new PubSub();
 

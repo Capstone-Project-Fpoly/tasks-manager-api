@@ -1,11 +1,7 @@
 const { createServer } = require("http");
 const express = require("express");
 const { ApolloServer } = require("@apollo/server");
-const {
-  ApolloServerPluginDrainHttpServer,
-} = require("apollo-server-core");
-
-const { startStandaloneServer } = require("@apollo/server/standalone");
+const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
 
 const fs = require("fs");
 const gql = require("graphql-tag");
@@ -26,9 +22,6 @@ const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const cors = require("cors");
 const { expressMiddleware } = require("@apollo/server/express4");
-const { PubSub } = require("graphql-subscriptions");
-const { log } = require("console");
-const { isContext } = require("vm");
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -63,7 +56,13 @@ const startServer = async () => {
   const serverCleanup = useServer(
     {
       schema,
-      context: async (ctx, msg, args) => {},
+      context: async (ctx, msg, args) => {
+        // console.log("context", ctx);
+      },
+      onConnect: async (connectionParams, webSocket, context) => {
+        console.log("onConnect", connectionParams);
+        return { connectionParams };
+      },
     },
     wsServer
   );
@@ -72,7 +71,7 @@ const startServer = async () => {
     schema,
     context,
     introspection: true,
-    playground: true, 
+    playground: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
@@ -88,10 +87,11 @@ const startServer = async () => {
   });
   await server.start();
 
+  app.use(cors());
+  app.use(express.json());
+
   app.use(
     "/graphql",
-    cors(),
-    express.json(),
     expressMiddleware(server, {
       context: context,
     })
