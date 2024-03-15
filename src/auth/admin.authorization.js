@@ -5,7 +5,7 @@ const adminAuth = async (authorization) => {
   try {
     user = await auth(token);
   } catch (error) {
-    throw new Error("Token không hợp lệ. Đăng nhập lại.");
+    throw new Error("Vui lòng đăng nhập. Hãy thử lại.");
   }
   if (user.role !== "admin") {
     throw new Error("Bạn không có quyền truy cập.");
