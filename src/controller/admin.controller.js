@@ -30,6 +30,11 @@ class AdminController {
   }
   async getUsers(req, res) {
     const authorization = req.headers.authorization;
+    if (!authorization) {
+      return res
+        .status(401)
+        .json({ message: "Vui lòng đăng nhập. Hãy thử lại." });
+    }
     let user;
     try {
       user = await adminAuth(authorization);
