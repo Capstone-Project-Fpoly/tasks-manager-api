@@ -6,6 +6,7 @@ const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
 class CardMutations {
   static createCard = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const list = await ListModel.findById(args.idList);
     const newCard = new CardModel({
@@ -36,6 +37,7 @@ class CardMutations {
         savedCard._id,
         "Card"
       );
+      pubSub.publish(board._id, { idBoard: board._id, user: user });
     });
 
     return savedCard;
@@ -59,6 +61,7 @@ class CardMutations {
 
   // Update a card by id
   static updateCard = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const input = args.input;
     const cardId = input.idCard;
@@ -99,11 +102,13 @@ class CardMutations {
         updateCard._id,
         "Card"
       );
+      pubSub.publish(board._id, { idBoard: board._id, user: user });
     });
     return updateCard;
   };
 
   static deleteCard = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const cardId = args.idCard;
     const idList = args.idList;
@@ -134,12 +139,13 @@ class CardMutations {
         cardId,
         "Card"
       );
+      pubSub.publish(board._id, { idBoard: board._id, user: user });
     });
-
     return true;
   };
 
   static moveCard = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
 
     const idBoard = args.idBoard;
@@ -213,6 +219,7 @@ class CardMutations {
         card._id,
         "Card"
       );
+      pubSub.publish(board._id, { idBoard: board._id, user: user });
     });
 
     return true;

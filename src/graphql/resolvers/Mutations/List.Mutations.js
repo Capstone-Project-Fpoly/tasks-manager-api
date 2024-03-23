@@ -30,6 +30,7 @@ class ListMutations {
     return lists;
   };
   static createList = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const idBoard = args.idBoard;
     const label = args.label;
@@ -61,11 +62,13 @@ class ListMutations {
           idBoard,
           "List"
         );
+        pubSub.publish(idBoard, { idBoard: idBoard, user: user });
       });
 
     return savedList;
   };
   static updateList = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const idList = args.idList;
     const label = args.label;
@@ -93,6 +96,10 @@ class ListMutations {
           updatedList.board,
           "List"
         );
+        pubSub.publish(updatedList.board, {
+          idBoard: updatedList.board,
+          user: user,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -101,6 +108,7 @@ class ListMutations {
     return updatedList;
   };
   static deleteList = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const idList = args.idList;
 
@@ -144,11 +152,13 @@ class ListMutations {
           board._id,
           "List"
         );
+        pubSub.publish(board._id, { idBoard: board._id, user: user });
       });
     return true;
   };
 
   static moveList = async (args, context) => {
+    const { pubSub } = context;
     const user = await auth(context.token);
 
     const idBoard = args.idBoard;
@@ -196,6 +206,7 @@ class ListMutations {
           idBoard,
           "List"
         );
+        pubSub.publish(idBoard, { idBoard: idBoard, user: user });
       });
     });
 

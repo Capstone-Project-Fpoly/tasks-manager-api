@@ -9,7 +9,6 @@ const resolvers = require("./src/graphql/resolvers/resolver");
 require("dotenv").config();
 const path = require("path");
 const { default: mongoose } = require("mongoose");
-const context = require("./src/graphql/context");
 const typeDefs = gql(
   fs.readFileSync(path.join(__dirname, "./src/graphql/schema.gql"), "utf-8")
 );
@@ -22,6 +21,10 @@ const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const cors = require("cors");
 const { expressMiddleware } = require("@apollo/server/express4");
+const { PubSub } = require("graphql-subscriptions");
+const auth = require("./src/auth/authorization");
+
+const pubSub = new PubSub();
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -34,6 +37,15 @@ const serviceAccount = {
   token_uri: process.env.FIREBASE_TOKEN_URI,
   auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+};
+
+const context = async ({ req }) => {
+  const authorization = req.headers.authorization;
+  if (!authorization) return null;
+  if (!authorization && !authorization.startsWith("Bearer ")) return null;
+  const token = authorization.toString().split(" ")[1];
+  if (!token) return null;
+  return { token: token, pubSub: pubSub };
 };
 
 const startServer = async () => {
@@ -57,9 +69,16 @@ const startServer = async () => {
     {
       schema,
       context: async (ctx, msg, args) => {
-        // console.log("context", ctx);
+        if (ctx.connectionParams == null) return { user: null, pubSub: pubSub };
+        const authorization = ctx.connectionParams.Authorization;
+        if (!authorization) return null;
+        if (!authorization && !authorization.startsWith("Bearer ")) return null;
+        const token = authorization.toString().split(" ")[1];
+        if (!token) return null;
+        const user = await auth(token);
+        return { user: user, pubSub: pubSub };
       },
-      onConnect: async (connectionParams, webSocket, context) => {
+      onConnect: async (connectionParams, webSocket) => {
         return { connectionParams };
       },
     },
