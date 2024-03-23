@@ -23,7 +23,6 @@ const sendNotificationForRemoveUser = async (idBoard, creator, users) => {
       users
     );
     if (deviceIds == null || deviceIds.length == 0) return;
-    console.log("deviceIds", deviceIds);
     send(deviceIds, `**Bạn** đã được mời vào bảng **${board.title}**`);
   } catch (err) {
     console.log(err);
@@ -119,14 +118,15 @@ class BoardMutations {
     if (board.ownerUser !== user.uid) {
       throw new Error("Bạn không có quyền sửa bảng này");
     }
+    const updateInput = {
+      updatedAt: new Date().toISOString(),
+    };
+    if (color != null) updateInput.color = color;
+    if (title != null) updateInput.title = title;
+    if (isPublic != null) updateInput.isPublic = isPublic;
     const updateNewBoard = await BoardModel.findOneAndUpdate(
       { _id: idBoard },
-      {
-        ...(color && { color }),
-        ...(title && { title }),
-        ...(isPublic && { isPublic }),
-        updatedAt: new Date().toISOString(),
-      },
+      updateInput,
       { new: true }
     ).catch((err) => {
       throw new Error(err);

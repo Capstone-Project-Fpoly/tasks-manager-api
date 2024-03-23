@@ -15,8 +15,6 @@ const authDeviceId = async (uid, token, deviceId) => {
     await userDeviceRef.doc(token).set({
       deviceId: deviceId,
     });
-
-    console.log("DeviceId authenticated successfully!");
   } catch (error) {
     console.error("Error authenticating deviceId:", error.message);
     throw error;

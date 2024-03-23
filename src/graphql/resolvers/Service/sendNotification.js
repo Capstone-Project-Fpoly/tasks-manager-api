@@ -8,7 +8,6 @@ const {
 const sendNotification = async (idBoard, uid, body, data, topic) => {
   try {
     const board = await BoardModel.findOne({ _id: idBoard });
-    console.log(board);
     const uids = board.users;
     // bỏ đi user tạo thông báo
     const index = uids.indexOf(uid);

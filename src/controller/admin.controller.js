@@ -24,8 +24,6 @@ class AdminController {
         },
       ],
     });
-
-    console.log("Report result:");
     response.rows.forEach((row) => console.log(row));
   }
   async getUsers(req, res) {
