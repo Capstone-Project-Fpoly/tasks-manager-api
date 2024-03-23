@@ -1,6 +1,7 @@
-class Subscriptions {
-  static testSubscription(args, context, pubSub) {
+class MutationSubscriptions {
+  static testSubscription(args, context) {
+    const { pubSub } = context;
     pubSub.publish("abc", { testSubscription: args });
   }
 }
-module.exports = Subscriptions;
+module.exports = MutationSubscriptions;

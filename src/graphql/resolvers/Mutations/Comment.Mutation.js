@@ -6,6 +6,7 @@ const sendNotification = require("../Service/sendNotification");
 
 class CommentMutation {
   static async createComment(args, context) {
+    const { pubSub } = context;
     const user = await auth(context.token);
     const { idCard, content } = args;
     const card = await CardModel.findById(idCard);
@@ -30,6 +31,7 @@ class CommentMutation {
       savedComment._id,
       "Comment"
     );
+    pubSub.publish(card.boardId, { idBoard: card.boardId, user: user });
     return savedComment;
   }
 

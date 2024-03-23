@@ -41,15 +41,16 @@ const {
 } = require("./Mutations/User.Mutation");
 const { getUsersOfBoard } = require("./Queres/User.Queries");
 const { testSubscription } = require("./Mutations/testSubscription");
-const test = require("./subscriptions/test");
 const {
   createComment,
   updateComment,
   deleteComment,
   getComments,
 } = require("./Mutations/Comment.Mutation");
+const { testSubscribe } = require("./subscriptions/test");
+const DetailBoardSubscription = require("./subscriptions/Detail.Board.Subscription");
 
-const pubSub = new PubSub();
+// const pubSub = new PubSub();
 
 const resolvers = {
   Query: {
@@ -64,7 +65,7 @@ const resolvers = {
   Mutation: {
     loginByGoogle: loginByGoogle,
     testCallSubscription: (parent, args, context) =>
-      testSubscription(args, context, pubSub),
+      testSubscription(args, context),
     createBoard: (parent, args, context) => createBoard(args, context),
     getBoards: (parent, args, context) => getBoards(args, context),
     leaveBoard: (_, args, context) => leaveBoard(args, context),
@@ -101,11 +102,17 @@ const resolvers = {
   Subscription: {
     test: {
       subscribe: (parent, args, context, info) => {
+        const { pubSub } = context;
         return pubSub.asyncIterator(args.id);
       },
-      resolve: (payload, args, context, info) => {
-        return payload.abc;
+      resolve: testSubscribe,
+    },
+    detailBoard: {
+      subscribe: (parent, args, context, info) => {
+        const { pubSub } = context;
+        return pubSub.asyncIterator(args.idBoard);
       },
+      resolve: DetailBoardSubscription,
     },
   },
   Board: {

@@ -65,7 +65,8 @@ class BoardMutations {
   };
   static leaveBoard = async (args, context) => {
     try {
-      const user = await auth(context.token);
+      const { pubSub, token } = context;
+      const user = await auth(token);
       const uid = user.uid;
       const idBoard = args.idBoard;
       const board = await BoardModel.findOne({ _id: idBoard });
@@ -100,7 +101,6 @@ class BoardMutations {
         idBoard,
         "Board"
       );
-
       return true;
     } catch (error) {
       console.log(error);
@@ -108,7 +108,8 @@ class BoardMutations {
     }
   };
   static updateBoard = async (args, context) => {
-    const user = await auth(context.token);
+    const { pubSub, token } = context;
+    const user = await auth(token);
     const idBoard = args.idBoard;
     const input = args.input;
     const color = input.color;
@@ -142,7 +143,8 @@ class BoardMutations {
   };
 
   static removeUserFromBoard = async (args, context) => {
-    const user = await auth(context.token);
+    const { pubSub, token } = context;
+    const user = await auth(token);
     const uid = args.uid;
     const idBoard = args.idBoard;
     const board = await BoardModel.findOne({ _id: idBoard });
