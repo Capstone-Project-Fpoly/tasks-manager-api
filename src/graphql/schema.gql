@@ -81,6 +81,10 @@ type Mutation {
   seenNotification(idNotification: String!): Boolean
   updateBoard(idBoard: String!, input: InputUpdateBoard!): Board
   removeUserFromBoard(idBoard: String!, uid: String!): Boolean
+  createComment(idCard: String!, content: String!): Comment
+  deleteComment(idCard: String!, content: String!): Boolean
+  updateComment(idComment: String!, content: String!): Comment
+  getComments(idCard: String!): [Comment]
 }
 type Subscription {
   test(id: String!): String
@@ -147,6 +151,7 @@ type Comment {
   # card: Card!
   comment: String!
   createdAt: String!
+  updatedAt: String!
 }
 
 type CheckList {
