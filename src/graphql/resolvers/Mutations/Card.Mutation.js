@@ -4,7 +4,7 @@ const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
-class CardService {
+class CardMutations {
   static createCard = async (args, context) => {
     const user = await auth(context.token);
     const list = await ListModel.findById(args.idList);
@@ -64,7 +64,7 @@ class CardService {
     const cardId = input.idCard;
     const checkListIds = input.checkLists
       ? await this.saveCheckLists(cardId, input.checkLists)
-      : [];
+      : null;
 
     const update = {
       updatedAt: new Date().toISOString(),
@@ -219,4 +219,4 @@ class CardService {
   };
 }
 
-module.exports = CardService;
+module.exports = CardMutations;

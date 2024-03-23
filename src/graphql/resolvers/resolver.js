@@ -42,6 +42,12 @@ const {
 const { getUsersOfBoard } = require("./Queres/User.Queries");
 const { testSubscription } = require("./Mutations/testSubscription");
 const test = require("./subscriptions/test");
+const {
+  createComment,
+  updateComment,
+  deleteComment,
+  getComments,
+} = require("./Mutations/Comment.Mutation");
 
 const pubSub = new PubSub();
 
@@ -87,6 +93,10 @@ const resolvers = {
     updateBoard: (_, args, context) => updateBoard(args, context),
     removeUserFromBoard: (_, args, context) =>
       removeUserFromBoard(args, context),
+    createComment: (_, args, context) => createComment(args, context),
+    updateComment: (_, args, context) => updateComment(args, context),
+    deleteComment: (_, args, context) => deleteComment(args, context),
+    getComments: (_, args, context) => getComments(args, context),
   },
   Subscription: {
     test: {

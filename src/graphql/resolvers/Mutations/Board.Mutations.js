@@ -96,7 +96,7 @@ class BoardMutations {
       sendNotification(
         idBoard,
         uid,
-        `${user.fullName} đã rời khỏi bảng "${board.title}"`,
+        `**${user.fullName}** đã rời khỏi bảng **${board.title}**`,
         "Board",
         idBoard,
         "Board"
@@ -134,7 +134,7 @@ class BoardMutations {
     sendNotification(
       idBoard,
       user.uid,
-      `${user.fullName} đã cập nhật bảng "${board.title}"`,
+      `**${user.fullName}** đã cập nhật bảng **${board.title}**`,
       idBoard,
       "Board"
     );
@@ -188,7 +188,7 @@ class BoardMutations {
     sendNotification(
       idBoard,
       user.uid,
-      `${user.fullName} đã xóa ${userIsDeleted.fullName} ra khỏi bảng "${board.title}"`,
+      `**${user.fullName}** đã xóa **${userIsDeleted.fullName}** ra khỏi bảng **${board.title}**`,
       idBoard,
       "RemoveUserFromBoard"
     );
