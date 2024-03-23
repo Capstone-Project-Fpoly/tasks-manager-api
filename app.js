@@ -60,7 +60,6 @@ const startServer = async () => {
         // console.log("context", ctx);
       },
       onConnect: async (connectionParams, webSocket, context) => {
-        console.log("onConnect", connectionParams);
         return { connectionParams };
       },
     },

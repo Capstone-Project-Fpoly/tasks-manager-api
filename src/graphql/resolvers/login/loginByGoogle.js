@@ -49,7 +49,6 @@ module.exports = async (parent, args, context) => {
     updatedAt: currentDate,
   });
   await user.save().catch((err) => {
-    console.log(err);
     throw new Error(err);
   });
   const jwtToken = jwt.sign({ uid: uid }, process.env.KEY);

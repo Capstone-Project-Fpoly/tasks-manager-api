@@ -17,7 +17,6 @@ module.exports = async (context) => {
     await userDeviceRef.doc(token).delete();
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
