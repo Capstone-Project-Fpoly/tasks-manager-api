@@ -16,12 +16,18 @@ class AuthController {
     if (!user) {
       return res.status(401).json({ message: "Email không tồn tại" });
     }
-    const checkPass = bcrypt.compare(password, user.passWord);
-    if (!checkPass) {
-      return res.status(401).json({ message: "Mật khẩu không đúng" });
-    }
-    const token = jwt.sign({ uid: user.uid }, process.env.KEY);
-    return res.status(200).json({ token });
+    bcrypt.compare(password, user.passWord).then((checkPass) => {
+      if (!checkPass) {
+        return res.status(401).json({ message: "Mật khẩu không đúng" });
+      }
+      const token = jwt.sign({ uid: user.uid }, process.env.KEY);
+      return res.status(200).json({ token });
+    });
+    // if (!checkPass) {
+    //   return res.status(401).json({ message: "Mật khẩu không đúng" });
+    // }
+    // const token = jwt.sign({ uid: user.uid }, process.env.KEY);
+    // return res.status(200).json({ token });
   }
 }
 module.exports = new AuthController();
