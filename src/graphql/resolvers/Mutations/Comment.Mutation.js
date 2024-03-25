@@ -41,6 +41,9 @@ class CommentMutation {
     const comment = await CommentModel.findById(idComment).catch((err) => {
       throw new Error(err);
     });
+    if (!comment) {
+      throw new Error("Không tìm thấy comment này");
+    }
     if (comment.user !== user.uid) {
       throw new Error("Bạn không có quyền chỉnh sửa comment này");
     }
@@ -64,6 +67,9 @@ class CommentMutation {
     const comment = await CommentModel.findById(idComment).catch((err) => {
       throw new Error(err);
     });
+    if (!comment) {
+      throw new Error("Không tìm thấy comment này");
+    }
     if (comment.user !== user.uid) {
       throw new Error("Bạn không có quyền xóa comment này");
     }
@@ -83,9 +89,10 @@ class CommentMutation {
       comment._id,
       "Comment"
     );
-    return CommentModel.findByIdAndDelete(idComment).catch((err) => {
+    await CommentModel.findByIdAndDelete(idComment).catch((err) => {
       throw new Error(err);
     });
+    return true;
   }
   static async getComments(args, context) {
     const user = await auth(context.token);
