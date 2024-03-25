@@ -8,11 +8,26 @@ class CardMutations {
   static createCard = async (args, context) => {
     const { pubSub } = context;
     const user = await auth(context.token);
-    const list = await ListModel.findById(args.idList);
+    const {
+      idList,
+      title,
+      description,
+      users,
+      endDate,
+      startedDate,
+      reminder,
+      checkLists,
+    } = args.input;
+    const list = await ListModel.findById(idList);
     const newCard = new CardModel({
       boardId: list.board,
-      title: args.title,
-      reminder: "Unknown",
+      title: title,
+      description: description,
+      users: users,
+      endDate: endDate,
+      startedDate: startedDate,
+      checkLists: checkLists,
+      reminder: reminder ?? "Unknown",
       createdBy: user.uid,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -33,7 +48,7 @@ class CardMutations {
       sendNotification(
         board._id,
         user.uid,
-        `**${user.fullName}** đã tạo thẻ mới **${args.title}** ở bảng **${board.title}**`,
+        `**${user.fullName}** đã tạo thẻ mới **${title}** ở bảng **${board.title}**`,
         savedCard._id,
         "Card"
       );
@@ -95,14 +110,27 @@ class CardMutations {
       throw new Error("Không tìm thấy card này");
     }
     BoardModel.findById(updateCard.boardId).then((board) => {
-      sendNotification(
-        board._id,
-        user.uid,
-        `**${user.fullName}** đã cập nhật thẻ **${updateCard.title}** trong bảng **${board.title}**`,
-        updateCard._id,
-        "Card"
-      );
-      pubSub.publish(board._id, { idBoard: board._id, user: user });
+      //kiểm tra xem bảng thay đổi cái gì thì gửi thông báo chi tiết
+      // nếu chỉ thay đổi 1 trường thì gửi thông báo về trường đó còn nếu thay đổi nhiều trường thì gửi thông báo về tất cả
+      if (Object.keys(update).length === 2) {
+        sendNotification(
+          board._id,
+          user.uid,
+          `**${user.fullName}** đã thay đổi thẻ **${updateCard.title}** trong bảng **${board.title}**`,
+          updateCard._id,
+          "Card"
+        );
+      } else {
+        Object.keys(update).forEach((key) => {
+          sendNotification(
+            board._id,
+            user.uid,
+            `**${user.fullName}** đã thay đổi **${key}** của thẻ **${updateCard.title}** trong bảng **${board.title}**`,
+            updateCard._id,
+            "Card"
+          );
+        });
+      }
     });
     return updateCard;
   };
@@ -111,7 +139,7 @@ class CardMutations {
     const { pubSub } = context;
     const user = await auth(context.token);
     const cardId = args.idCard;
-    const idList = args.idList;
+    const idList = idList;
 
     const list = await ListModel.findById(idList);
 

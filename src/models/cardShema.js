@@ -13,8 +13,8 @@ const ReminderEnum = {
 };
 
 const cardSchema = new mongoose.Schema({
-  boardId: { type: String, require: true },
-  title: { type: String, require: true },
+  boardId: { type: String },
+  title: { type: String },
   description: String,
   users: [String],
   endDate: String,
@@ -26,14 +26,14 @@ const cardSchema = new mongoose.Schema({
   },
   comments: [String],
   checkLists: [String],
-  createdAt: { type: String, required: true },
-  createdBy: { type: String, require: true },
+  createdAt: { type: String },
+  createdBy: { type: String },
   status: {
     type: String,
     enum: ["Active", "Archived", "Deleted"],
     default: "Active",
   },
-  updatedAt: { type: String, required: true },
+  updatedAt: { type: String },
 });
 
 const CardModel = mongoose.model("cards", cardSchema);

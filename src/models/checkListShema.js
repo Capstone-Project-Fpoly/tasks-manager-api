@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const checkListSchema = new mongoose.Schema({
-    card: { type: String , required: true },
-    content: { type: String, required: true },
-    isChecked: { type: Boolean, required: true }
+  card: { type: String },
+  content: { type: String },
+  isChecked: { type: Boolean },
 });
 
-const CheckListModel = mongoose.model('checkLists', checkListSchema);
+const CheckListModel = mongoose.model("checkLists", checkListSchema);
 
 module.exports = CheckListModel;

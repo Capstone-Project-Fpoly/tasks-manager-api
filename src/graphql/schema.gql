@@ -37,6 +37,17 @@ input InputUpdateCard {
   checkLists: [CheckListInput!]
 }
 
+input InputCreateCard {
+  idList: String!
+  title: String!
+  description: String
+  users: [String!]
+  endDate: String
+  startedDate: String
+  reminder: Reminder!
+  checkLists: [CheckListInput!]
+}
+
 input InputMoveList {
   oldListIndex: Int!
   newListIndex: Int!
@@ -71,7 +82,7 @@ type Mutation {
   updateList(idList: String!, label: String!): List
   deleteList(idList: String!): Boolean
   getCard(idCard: String!): Card
-  createCard(idList: String!, title: String!): Card
+  createCard(input: InputCreateCard!): Card
   updateCard(input: InputUpdateCard!): Card
   deleteCard(idList: String!, idCard: String!): Boolean
   moveList(idBoard: String!, input: InputMoveList!): Boolean
@@ -93,7 +104,7 @@ type Subscription {
 type User {
   uid: String!
   avatar: String
-  createdAt: String
+  createdAt: String!
   updatedAt: String
   email: String
   fullName: String
@@ -101,10 +112,10 @@ type User {
 
 type Board {
   id: String!
-  ownerUser: User!
+  ownerUser: User
   color: String
   title: String
-  isPublic: Boolean!
+  isPublic: Boolean
   # lists: [List!]
   # users: [User!]
   createdAt: String!
@@ -116,13 +127,14 @@ type List {
   label: String!
   createdAt: String!
   cards: [Card!]
-  createdBy: User!
+  createdBy: User
 }
 
 type Card {
   id: String!
   # list: List!
-  title: String
+  boardId: String
+  title: String!
   description: String
   users: [User!]
   endDate: String
@@ -131,7 +143,7 @@ type Card {
   comments: [Comment!]
   checkLists: [CheckList!]
   createdAt: String!
-  createdBy: User!
+  createdBy: User
 }
 
 enum Reminder {
@@ -148,11 +160,11 @@ enum Reminder {
 
 type Comment {
   id: String!
-  user: User!
+  user: User
   # card: Card!
   comment: String!
   createdAt: String!
-  updatedAt: String!
+  updatedAt: String
 }
 
 type CheckList {
@@ -164,13 +176,14 @@ type CheckList {
 
 type Notification {
   id: String!
+  idBoard: String
   createdAt: String!
   is_seen: Boolean!
-  creator: User!
+  creator: User
   title: String!
   content: String!
   topic: TopicNotification!
-  data: String!
+  data: String
 }
 
 enum TopicNotification {

@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema({
-  idBoard: { type: String, require: true },
-  data: { type: String, require: true },
-  content: { type: String, require: true },
-  creator: { type: String, require: true },
+  idBoard: { type: String },
+  data: { type: String },
+  content: { type: String },
+  creator: { type: String },
   topic: {
     type: String,
     enum: [
@@ -17,10 +17,10 @@ const notificationSchema = new mongoose.Schema({
       "RemoveUserFromBoard",
     ],
   },
-  users: { type: [String], require: true },
-  seenListUser: { type: [String], require: true },
-  updatedAt: { type: String, required: true },
-  createdAt: { type: String, required: true },
+  users: { type: [String] },
+  seenListUser: { type: [String] },
+  updatedAt: { type: String },
+  createdAt: { type: String },
 });
 
 const NotificationModel = mongoose.model("notifications", notificationSchema);
