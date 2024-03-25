@@ -35,6 +35,7 @@ input InputUpdateCard {
   startedDate: String
   reminder: Reminder!
   checkLists: [CheckListInput!]
+  labels: [String!]
 }
 
 input InputCreateCard {
@@ -93,9 +94,13 @@ type Mutation {
   updateBoard(idBoard: String!, input: InputUpdateBoard!): Board
   removeUserFromBoard(idBoard: String!, uid: String!): Boolean
   createComment(idCard: String!, content: String!): Comment
-  deleteComment(idCard: String!, content: String!): Boolean
+  deleteComment(idComment: String!): Boolean
   updateComment(idComment: String!, content: String!): Comment
   getComments(idCard: String!): [Comment]
+  getLabelsOfBoard(idBoard: String!): [LabelCard]
+  createLabelOfBoard(idBoard: String!, title: String, color: String!): LabelCard
+  updateLabelOfBoard(idLabel: String!, title: String, color: String!): LabelCard
+  deleteLabelOfBoard(idLabel: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -142,6 +147,7 @@ type Card {
   reminder: Reminder!
   comments: [Comment!]
   checkLists: [CheckList!]
+  labels: [LabelCard!]
   createdAt: String!
   createdBy: User
 }
@@ -184,6 +190,12 @@ type Notification {
   content: String!
   topic: TopicNotification!
   data: String
+}
+
+type LabelCard {
+  id: String!
+  title: String
+  color: String
 }
 
 enum TopicNotification {

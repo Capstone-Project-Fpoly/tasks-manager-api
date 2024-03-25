@@ -24,6 +24,7 @@ const cardSchema = new mongoose.Schema({
     enum: Object.values(ReminderEnum),
     default: ReminderEnum.Unknown,
   },
+  labels: [String],
   comments: [String],
   checkLists: [String],
   createdAt: { type: String },

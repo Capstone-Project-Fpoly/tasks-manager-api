@@ -95,6 +95,7 @@ class CardMutations {
     if (input.startedDate !== null) update.startedDate = input.startedDate;
     update.reminder = input.reminder ?? "Unknown";
     if (checkListIds !== null) update.checkLists = checkListIds;
+    if (input.labels !== null) update.labels = input.labels;
 
     const updateCard = await CardModel.findOneAndUpdate(
       { _id: cardId },
@@ -110,27 +111,14 @@ class CardMutations {
       throw new Error("Không tìm thấy card này");
     }
     BoardModel.findById(updateCard.boardId).then((board) => {
-      //kiểm tra xem bảng thay đổi cái gì thì gửi thông báo chi tiết
-      // nếu chỉ thay đổi 1 trường thì gửi thông báo về trường đó còn nếu thay đổi nhiều trường thì gửi thông báo về tất cả
-      if (Object.keys(update).length === 2) {
-        sendNotification(
-          board._id,
-          user.uid,
-          `**${user.fullName}** đã thay đổi thẻ **${updateCard.title}** trong bảng **${board.title}**`,
-          updateCard._id,
-          "Card"
-        );
-      } else {
-        Object.keys(update).forEach((key) => {
-          sendNotification(
-            board._id,
-            user.uid,
-            `**${user.fullName}** đã thay đổi **${key}** của thẻ **${updateCard.title}** trong bảng **${board.title}**`,
-            updateCard._id,
-            "Card"
-          );
-        });
-      }
+      sendNotification(
+        board._id,
+        user.uid,
+        `**${user.fullName}** đã thay đổi thẻ **${updateCard.title}** trong bảng **${board.title}**`,
+        updateCard._id,
+        "Card"
+      );
+      pubSub.publish(board._id, { idBoard: board._id, user: user });
     });
     return updateCard;
   };
