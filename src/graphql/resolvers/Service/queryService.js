@@ -5,6 +5,7 @@ const CommentModel = require("../../../models/commentSchema");
 const ListModel = require("../../../models/listSchema");
 const UserModel = require("../../../models/userSchema");
 const auth = require("../../../auth/authorization");
+const LabelCardModel = require("../../../models/labelCardSchema");
 
 class Query {
   static getUserById = async (uid) => {
@@ -44,11 +45,13 @@ class Query {
   };
 
   static getAllUsersByIds = async (uids) => {
+    if (!uids) return [];
     const users = await UserModel.find({ uid: { $in: uids } });
     return users;
   };
 
   static getAllBoardsByIds = async (ids) => {
+    if (!ids) return [];
     const boards = await BoardModel.find({
       _id: { $in: ids },
       status: "Active",
@@ -57,6 +60,7 @@ class Query {
   };
 
   static getAllCardsByIds = async (ids) => {
+    if (!ids) return [];
     const cards = await CardModel.find({ _id: { $in: ids }, status: "Active" });
     cards.sort(
       (a, b) => ids.indexOf(a._id.toString()) - ids.indexOf(b._id.toString())
@@ -65,18 +69,27 @@ class Query {
   };
 
   static getAllCheckListsByIds = async (ids) => {
+    if (!ids) return [];
     const checkLists = await CheckListModel.find({ _id: { $in: ids } });
     return checkLists;
   };
 
   static getAllCommentsByIds = async (ids) => {
+    if (!ids) return [];
     const comments = await CommentModel.find({ _id: { $in: ids } });
     return comments;
   };
 
   static getAllListsByIds = async (ids) => {
+    if (!ids) return [];
     const lists = await ListModel.find({ _id: { $in: ids }, status: "Active" });
     return lists;
+  };
+
+  static getAllLabelCardsByIds = async (ids) => {
+    if (!ids) return [];
+    const labels = await LabelCardModel.find({ _id: { $in: ids } });
+    return labels;
   };
 }
 

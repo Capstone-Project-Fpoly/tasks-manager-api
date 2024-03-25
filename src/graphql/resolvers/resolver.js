@@ -49,6 +49,12 @@ const {
 } = require("./Mutations/Comment.Mutation");
 const { testSubscribe } = require("./subscriptions/test");
 const DetailBoardSubscription = require("./subscriptions/Detail.Board.Subscription");
+const {
+  getLabelsOfBoard,
+  createLabelOfBoard,
+  updateLabelOfBoard,
+  deleteLabelOfBoard,
+} = require("./Mutations/LabelCard.Mutation");
 
 // const pubSub = new PubSub();
 
@@ -98,6 +104,10 @@ const resolvers = {
     updateComment: (_, args, context) => updateComment(args, context),
     deleteComment: (_, args, context) => deleteComment(args, context),
     getComments: (_, args, context) => getComments(args, context),
+    getLabelsOfBoard: (_, args, context) => getLabelsOfBoard(args, context),
+    createLabelOfBoard: (_, args, context) => createLabelOfBoard(args, context),
+    updateLabelOfBoard: (_, args, context) => updateLabelOfBoard(args, context),
+    deleteLabelOfBoard: (_, args, context) => deleteLabelOfBoard(args, context),
   },
   Subscription: {
     test: {
@@ -156,6 +166,9 @@ const resolvers = {
     createdBy: (parent, args, context) => {
       return Query.getUserById(parent.createdBy);
     },
+    labels: (parent, args, context) => {
+      return Query.getAllLabelCardsByIds(parent.labels);
+    },
   },
   Comment: {
     id: (parent) => parent._id.toString(),
@@ -176,6 +189,9 @@ const resolvers = {
     creator: (parent, args, context) => {
       return Query.getUserById(parent.creator);
     },
+  },
+  LabelCard: {
+    id: (parent) => parent._id.toString(),
   },
 };
 

@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
 const listSchema = new mongoose.Schema({
-  board: { type: String, required: true },
-  label: { type: String, required: true },
+  board: { type: String },
+  label: { type: String },
   status: {
     type: String,
     enum: ["Active", "Archived", "Deleted"],
     default: "Active",
   },
-  updatedAt: { type: String, required: true },
-  createdAt: { type: String, required: true },
+  updatedAt: { type: String },
+  createdAt: { type: String },
   cards: [String],
-  createdBy: { type: String, require: true },
+  createdBy: { type: String },
 });
 
 const ListModel = mongoose.model("lists", listSchema);

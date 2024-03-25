@@ -1,7 +1,6 @@
 const BoardModel = require("../../../models/boardSchema");
 const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
-const NotificationModel = require("../../../models/notificationSchema");
 const UserModel = require("../../../models/userSchema");
 const {
   createNotificationModelForRemoveUser,
@@ -132,13 +131,41 @@ class BoardMutations {
     ).catch((err) => {
       throw new Error(err);
     });
-    sendNotification(
-      idBoard,
-      user.uid,
-      `**${user.fullName}** đã cập nhật bảng **${board.title}**`,
-      idBoard,
-      "Board"
-    );
+    //kiểm tra xem bảng thay đổi cái gì thì gửi thông báo chi tiết
+    // nếu chỉ thay đổi 1 trường thì gửi thông báo về trường đó còn nếu thay đổi nhiều trường thì gửi thông báo về tất cả
+    if (color != null && title == null && isPublic == null) {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `**${user.fullName}** đã thay đổi màu của bảng **${board.title}** thành **${color}**`,
+        idBoard,
+        "UpdateBoard"
+      );
+    } else if (color == null && title != null && isPublic == null) {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `**${user.fullName}** đã thay đổi tên của bảng **${board.title}** thành **${title}**`,
+        idBoard,
+        "UpdateBoard"
+      );
+    } else if (color == null && title == null && isPublic != null) {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `**${user.fullName}** đã thay đổi quyền truy cập của bảng **${board.title}** thành **${isPublic}**`,
+        idBoard,
+        "UpdateBoard"
+      );
+    } else {
+      sendNotification(
+        idBoard,
+        user.uid,
+        `**${user.fullName}** đã thay đổi thông tin của bảng **${board.title}**`,
+        idBoard,
+        "UpdateBoard"
+      );
+    }
     return updateNewBoard;
   };
 

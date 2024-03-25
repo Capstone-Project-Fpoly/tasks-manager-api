@@ -1,9 +1,4 @@
-const { get } = require("mongoose");
-const BoardModel = require("../../../models/boardSchema");
-const CardModel = require("../../../models/cardShema");
-const ListModel = require("../../../models/listSchema");
 const NotificationModel = require("../../../models/notificationSchema");
-const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
 
 const getAllNotifications = async (uid) => {
@@ -27,6 +22,7 @@ const formattedNotification = async (uid, notifications) => {
     notifications.map(async (notification) => {
       return {
         id: notification._id,
+        idBoard: notification.idBoard,
         createdAt: notification.createdAt,
         is_seen: notification.seenListUser.includes(uid),
         creator: notification.creator,

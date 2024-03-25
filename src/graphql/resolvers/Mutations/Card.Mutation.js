@@ -8,11 +8,26 @@ class CardMutations {
   static createCard = async (args, context) => {
     const { pubSub } = context;
     const user = await auth(context.token);
-    const list = await ListModel.findById(args.idList);
+    const {
+      idList,
+      title,
+      description,
+      users,
+      endDate,
+      startedDate,
+      reminder,
+      checkLists,
+    } = args.input;
+    const list = await ListModel.findById(idList);
     const newCard = new CardModel({
       boardId: list.board,
-      title: args.title,
-      reminder: "Unknown",
+      title: title,
+      description: description,
+      users: users,
+      endDate: endDate,
+      startedDate: startedDate,
+      checkLists: checkLists,
+      reminder: reminder ?? "Unknown",
       createdBy: user.uid,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -33,7 +48,7 @@ class CardMutations {
       sendNotification(
         board._id,
         user.uid,
-        `**${user.fullName}** đã tạo thẻ mới **${args.title}** ở bảng **${board.title}**`,
+        `**${user.fullName}** đã tạo thẻ mới **${title}** ở bảng **${board.title}**`,
         savedCard._id,
         "Card"
       );
@@ -80,6 +95,7 @@ class CardMutations {
     if (input.startedDate !== null) update.startedDate = input.startedDate;
     update.reminder = input.reminder ?? "Unknown";
     if (checkListIds !== null) update.checkLists = checkListIds;
+    if (input.labels !== null) update.labels = input.labels;
 
     const updateCard = await CardModel.findOneAndUpdate(
       { _id: cardId },
@@ -98,7 +114,7 @@ class CardMutations {
       sendNotification(
         board._id,
         user.uid,
-        `**${user.fullName}** đã cập nhật thẻ **${updateCard.title}** trong bảng **${board.title}**`,
+        `**${user.fullName}** đã thay đổi thẻ **${updateCard.title}** trong bảng **${board.title}**`,
         updateCard._id,
         "Card"
       );
@@ -111,7 +127,7 @@ class CardMutations {
     const { pubSub } = context;
     const user = await auth(context.token);
     const cardId = args.idCard;
-    const idList = args.idList;
+    const idList = idList;
 
     const list = await ListModel.findById(idList);
 

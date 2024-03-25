@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const boardSchema = new mongoose.Schema({
-  ownerUser: { type: String, required: true },
+  ownerUser: { type: String },
   color: String,
   title: String,
-  isPublic: { type: Boolean, required: true },
+  isPublic: { type: Boolean },
   lists: [String],
   users: [String],
   status: {
@@ -13,8 +13,8 @@ const boardSchema = new mongoose.Schema({
     default: "Active",
   },
   inviteUsers: [String],
-  updatedAt: { type: String, required: true },
-  createdAt: { type: String, required: true },
+  updatedAt: { type: String },
+  createdAt: { type: String },
 });
 
 const BoardModel = mongoose.model("boards", boardSchema);

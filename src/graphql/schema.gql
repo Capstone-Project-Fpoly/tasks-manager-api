@@ -35,6 +35,18 @@ input InputUpdateCard {
   startedDate: String
   reminder: Reminder!
   checkLists: [CheckListInput!]
+  labels: [String!]
+}
+
+input InputCreateCard {
+  idList: String!
+  title: String!
+  description: String
+  users: [String!]
+  endDate: String
+  startedDate: String
+  reminder: Reminder!
+  checkLists: [CheckListInput!]
 }
 
 input InputMoveList {
@@ -71,7 +83,7 @@ type Mutation {
   updateList(idList: String!, label: String!): List
   deleteList(idList: String!): Boolean
   getCard(idCard: String!): Card
-  createCard(idList: String!, title: String!): Card
+  createCard(input: InputCreateCard!): Card
   updateCard(input: InputUpdateCard!): Card
   deleteCard(idList: String!, idCard: String!): Boolean
   moveList(idBoard: String!, input: InputMoveList!): Boolean
@@ -82,9 +94,13 @@ type Mutation {
   updateBoard(idBoard: String!, input: InputUpdateBoard!): Board
   removeUserFromBoard(idBoard: String!, uid: String!): Boolean
   createComment(idCard: String!, content: String!): Comment
-  deleteComment(idCard: String!, content: String!): Boolean
+  deleteComment(idComment: String!): Boolean
   updateComment(idComment: String!, content: String!): Comment
   getComments(idCard: String!): [Comment]
+  getLabelsOfBoard(idBoard: String!): [LabelCard]
+  createLabelOfBoard(idBoard: String!, title: String, color: String!): LabelCard
+  updateLabelOfBoard(idLabel: String!, title: String, color: String!): LabelCard
+  deleteLabelOfBoard(idLabel: String!): Boolean
 }
 type Subscription {
   test(id: String!): String
@@ -93,7 +109,7 @@ type Subscription {
 type User {
   uid: String!
   avatar: String
-  createdAt: String
+  createdAt: String!
   updatedAt: String
   email: String
   fullName: String
@@ -101,10 +117,10 @@ type User {
 
 type Board {
   id: String!
-  ownerUser: User!
+  ownerUser: User
   color: String
   title: String
-  isPublic: Boolean!
+  isPublic: Boolean
   # lists: [List!]
   # users: [User!]
   createdAt: String!
@@ -116,13 +132,14 @@ type List {
   label: String!
   createdAt: String!
   cards: [Card!]
-  createdBy: User!
+  createdBy: User
 }
 
 type Card {
   id: String!
   # list: List!
-  title: String
+  boardId: String
+  title: String!
   description: String
   users: [User!]
   endDate: String
@@ -130,8 +147,9 @@ type Card {
   reminder: Reminder!
   comments: [Comment!]
   checkLists: [CheckList!]
+  labels: [LabelCard!]
   createdAt: String!
-  createdBy: User!
+  createdBy: User
 }
 
 enum Reminder {
@@ -148,11 +166,11 @@ enum Reminder {
 
 type Comment {
   id: String!
-  user: User!
+  user: User
   # card: Card!
   comment: String!
   createdAt: String!
-  updatedAt: String!
+  updatedAt: String
 }
 
 type CheckList {
@@ -164,13 +182,20 @@ type CheckList {
 
 type Notification {
   id: String!
+  idBoard: String
   createdAt: String!
   is_seen: Boolean!
-  creator: User!
+  creator: User
   title: String!
   content: String!
   topic: TopicNotification!
-  data: String!
+  data: String
+}
+
+type LabelCard {
+  id: String!
+  title: String
+  color: String
 }
 
 enum TopicNotification {
