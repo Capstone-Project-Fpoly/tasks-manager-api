@@ -1,6 +1,7 @@
 const auth = require("../../../auth/authorization");
 const CardModel = require("../../../models/cardShema");
 const CommentModel = require("../../../models/commentSchema");
+const NotificationModel = require("../../../models/notificationSchema");
 const { send } = require("../Service/notification");
 const sendNotification = require("../Service/sendNotification");
 
@@ -80,6 +81,13 @@ class CommentMutation {
       (id) => id.toString() !== idComment.toString()
     );
     card.save().catch((err) => {
+      console.log(err);
+    });
+    // xóa thông báo có topic là comment và data là idComment
+    await NotificationModel.deleteMany({
+      topic: "Comment",
+      data: idComment,
+    }).catch((err) => {
       console.log(err);
     });
     sendNotification(
