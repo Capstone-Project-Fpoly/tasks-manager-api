@@ -127,7 +127,7 @@ class CardMutations {
     const { pubSub } = context;
     const user = await auth(context.token);
     const cardId = args.idCard;
-    const idList = idList;
+    const idList = args.idList;
 
     const list = await ListModel.findById(idList);
 
