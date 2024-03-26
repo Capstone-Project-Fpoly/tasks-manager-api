@@ -3,6 +3,7 @@ const CardModel = require("../../../models/cardShema");
 const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
+const NotificationModel = require("../../../models/notificationSchema");
 class ListMutations {
   static getLists = async (args, context) => {
     const user = await auth(context.token);
@@ -138,6 +139,13 @@ class ListMutations {
 
     const board = await BoardModel.findOne({ lists: idList });
     board.lists = board.lists.filter((id) => id.toString() !== idList);
+    // xóa tất cả các thông báo có topic là list và data là listId
+    await NotificationModel.deleteMany({
+      topic: "List",
+      data: idList,
+    }).catch((err) => {
+      console.log(err);
+    });
     await board
       .save()
       .catch((error) => {

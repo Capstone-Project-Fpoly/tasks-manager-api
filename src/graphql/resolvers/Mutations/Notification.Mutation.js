@@ -2,9 +2,14 @@ const NotificationModel = require("../../../models/notificationSchema");
 const auth = require("../../../auth/authorization");
 
 const getAllNotifications = async (uid) => {
-  const notifications = await NotificationModel.find({ users: uid }).sort({
-    createdAt: -1,
-  });
+  const notifications = await NotificationModel.find({
+    users: uid,
+  })
+    .sort({
+      createdAt: -1,
+    })
+    .limit(100);
+
   return notifications;
 };
 const getNotificationsOfBoard = async (idBoard) => {

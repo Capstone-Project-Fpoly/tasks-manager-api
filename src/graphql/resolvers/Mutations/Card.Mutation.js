@@ -4,6 +4,7 @@ const CheckListModel = require("../../../models/checkListShema");
 const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
+const NotificationModel = require("../../../models/notificationSchema");
 class CardMutations {
   static createCard = async (args, context) => {
     const { pubSub } = context;
@@ -145,6 +146,13 @@ class CardMutations {
 
     list.cards = list.cards.filter((id) => id.toString() !== cardId);
     await list.save().catch((err) => {
+      console.log(err);
+    });
+    // xóa tất cả các thông báo có topic là card và data là cardId
+    await NotificationModel.deleteMany({
+      topic: "Card",
+      data: cardId,
+    }).catch((err) => {
       console.log(err);
     });
     BoardModel.findById(list.board).then((board) => {
