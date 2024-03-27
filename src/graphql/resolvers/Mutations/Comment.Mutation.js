@@ -29,7 +29,7 @@ class CommentMutation {
       card.boardId,
       user.uid,
       `**${user.fullName}** đã thêm nhận xét **${content}** vào thẻ **${card.title}**`,
-      savedComment._id,
+      card.id,
       "Comment"
     );
     pubSub.publish(card.boardId, { idBoard: card.boardId, user: user });
