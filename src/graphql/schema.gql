@@ -4,6 +4,7 @@ type Query {
   notificationCollection(idBoard: String): [Notification]
   getUsersInviteToBoard(idBoard: String!, query: String): [User]
   getUsersOfBoard(idBoard: String!, query: String): [User]
+  getMyCards: ResultMyCards
 }
 
 input InputEmail {
@@ -101,6 +102,11 @@ type Mutation {
   createLabelOfBoard(idBoard: String!, title: String, color: String!): LabelCard
   updateLabelOfBoard(idLabel: String!, title: String, color: String!): LabelCard
   deleteLabelOfBoard(idLabel: String!): Boolean
+}
+
+type ResultMyCards {
+  boards: [Board]
+  cards: [Card]
 }
 type Subscription {
   test(id: String!): String

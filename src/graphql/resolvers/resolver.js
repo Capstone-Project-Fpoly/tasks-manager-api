@@ -55,6 +55,7 @@ const {
   updateLabelOfBoard,
   deleteLabelOfBoard,
 } = require("./Mutations/LabelCard.Mutation");
+const { getMyCards } = require("./Queres/Card.Queries");
 
 // const pubSub = new PubSub();
 
@@ -67,6 +68,7 @@ const resolvers = {
     getUsersInviteToBoard: (_, args, context) =>
       getUsersInviteToBoard(args, context),
     getUsersOfBoard: (_, args, context) => getUsersOfBoard(args, context),
+    getMyCards: (_, args, context) => getMyCards(args, context),
   },
   Mutation: {
     loginByGoogle: loginByGoogle,
