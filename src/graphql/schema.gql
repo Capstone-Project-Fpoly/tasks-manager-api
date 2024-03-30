@@ -102,6 +102,10 @@ type Mutation {
   createLabelOfBoard(idBoard: String!, title: String, color: String!): LabelCard
   updateLabelOfBoard(idLabel: String!, title: String, color: String!): LabelCard
   deleteLabelOfBoard(idLabel: String!): Boolean
+  closeBoard(idBoard: String!): Boolean
+  openBoard(idBoard: String!): Boolean
+  deleteBoard(idBoard: String!): Boolean
+  checkBoard(idBoard: String!): Boolean
 }
 
 type ResultMyCards {
@@ -111,6 +115,7 @@ type ResultMyCards {
 type Subscription {
   test(id: String!): String
   detailBoard(idBoard: String!): [List]
+  checkCloseBoard(idBoard: String!): Boolean
 }
 type User {
   uid: String!

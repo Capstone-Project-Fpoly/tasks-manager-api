@@ -1,4 +1,5 @@
 const auth = require("../../../auth/authorization");
+const { KEY_BOARD_DETAIL } = require("../../../constant/common");
 const CardModel = require("../../../models/cardShema");
 const LabelCardModel = require("../../../models/labelCardSchema");
 class LabelCardMutations {
@@ -41,7 +42,10 @@ class LabelCardMutations {
       labelCard.title = title;
       labelCard.color = color;
       await labelCard.save();
-      pubSub.publish(labelCard.board, { idBoard: labelCard.board, user: user });
+      pubSub.publish(labelCard.board + KEY_BOARD_DETAIL, {
+        idBoard: labelCard.board,
+        user: user,
+      });
       return labelCard;
     } catch (error) {
       console.log(error);
@@ -64,7 +68,10 @@ class LabelCardMutations {
         await card.save();
       }
       await labelCard.deleteOne();
-      pubSub.publish(labelCard.board, { idBoard: labelCard.board, user: user });
+      pubSub.publish(labelCard.board + KEY_BOARD_DETAIL, {
+        idBoard: labelCard.board,
+        user: user,
+      });
       return true;
     } catch (error) {
       console.log(error);

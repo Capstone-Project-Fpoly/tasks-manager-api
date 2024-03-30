@@ -6,6 +6,7 @@ module.exports = async (parent, args, context, info) => {
   // hãy lấy tất cả các list của trường lists trong bảng có idBoard
   // sau đó lấy tất cả các list theo id của list trong trường lists
   const board = await BoardModel.findById(idBoard);
+  if (board.status !== "Active") return null;
   const lists = await ListModel.find({
     _id: { $in: board.lists },
     status: "Active",

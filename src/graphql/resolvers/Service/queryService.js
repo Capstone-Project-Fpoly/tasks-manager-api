@@ -23,6 +23,10 @@ class Query {
   static getCardById = async (id) => {
     if (!id) return null;
     const result = await CardModel.findOne({ _id: id, status: "Active" });
+    const board = await BoardModel.findOne({ _id: result.boardId });
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
     return result;
   };
 

@@ -58,6 +58,7 @@ class UserMutations {
     const users = args.idUsers;
     const board = await BoardModel.findById(boardId);
     if (!board) throw new Error("Không tìm thấy bảng này");
+    if (board.status !== "Active") throw new Error("Bảng đã bị đóng");
     const newUsers = users.filter((id) => !board.users.includes(id));
     if (newUsers.length === 0) throw new Error("Người dùng đã có trong bảng");
     const inviteUsers = !board.inviteUsers ? [] : board.inviteUsers;
@@ -78,6 +79,7 @@ class UserMutations {
     const idNotification = args.idNotification;
     const board = await BoardModel.findById(boardId);
     if (!board) throw new Error("Không tìm thấy bảng này");
+    if (board.status !== "Active") throw new Error("Bảng đã bị đóng");
     if (!board.inviteUsers)
       throw new Error("Bạn không có lời mời vào bảng này");
     if (!board.inviteUsers.includes(user.uid))
