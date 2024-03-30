@@ -11,7 +11,13 @@ class CardQueries {
     const boardIds = cards.map((card) => card.boardId);
     const uniqueBoardIds = [...new Set(boardIds)];
     const boards = await BoardModel.find({
-      _id: { $in: uniqueBoardIds },
+      $and: [{ _id: { $in: uniqueBoardIds } }, { status: "Active" }],
+    });
+    // xóa các thẻ không thuộc bảng nào
+    cards.forEach((card) => {
+      if (!boards.find((board) => board._id == card.boardId)) {
+        cards.splice(cards.indexOf(card), 1);
+      }
     });
     const ResultMyCards = {
       cards,

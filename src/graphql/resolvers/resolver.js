@@ -9,6 +9,10 @@ const {
   leaveBoard,
   updateBoard,
   removeUserFromBoard,
+  closeBoard,
+  openBoard,
+  deleteBoard,
+  checkBoard,
 } = require("./Mutations/Board.Mutations");
 const loginByEMail = require("./login/loginByEmail");
 const registerByEmail = require("./login/registerByEmail");
@@ -56,6 +60,8 @@ const {
   deleteLabelOfBoard,
 } = require("./Mutations/LabelCard.Mutation");
 const { getMyCards } = require("./Queres/Card.Queries");
+const { KEY_BOARD_DETAIL, KEY_CLOSE_BOARD } = require("../../constant/common");
+const { checkCloseBoard } = require("./subscriptions/Board.Subscription");
 
 // const pubSub = new PubSub();
 
@@ -110,6 +116,10 @@ const resolvers = {
     createLabelOfBoard: (_, args, context) => createLabelOfBoard(args, context),
     updateLabelOfBoard: (_, args, context) => updateLabelOfBoard(args, context),
     deleteLabelOfBoard: (_, args, context) => deleteLabelOfBoard(args, context),
+    closeBoard: (_, args, context) => closeBoard(args, context),
+    openBoard: (_, args, context) => openBoard(args, context),
+    deleteBoard: (_, args, context) => deleteBoard(args, context),
+    checkBoard: (_, args, context) => checkBoard(args, context),
   },
   Subscription: {
     test: {
@@ -122,9 +132,16 @@ const resolvers = {
     detailBoard: {
       subscribe: (parent, args, context, info) => {
         const { pubSub } = context;
-        return pubSub.asyncIterator(args.idBoard);
+        return pubSub.asyncIterator(args.idBoard + KEY_BOARD_DETAIL);
       },
       resolve: DetailBoardSubscription,
+    },
+    checkCloseBoard: {
+      subscribe: (parent, args, context, info) => {
+        const { pubSub } = context;
+        return pubSub.asyncIterator(args.idBoard + KEY_CLOSE_BOARD);
+      },
+      resolve: checkCloseBoard,
     },
   },
   Board: {

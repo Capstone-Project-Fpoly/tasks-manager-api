@@ -4,6 +4,7 @@ const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
 const NotificationModel = require("../../../models/notificationSchema");
+const { KEY_BOARD_DETAIL } = require("../../../constant/common");
 class ListMutations {
   static getLists = async (args, context) => {
     const user = await auth(context.token);
@@ -15,7 +16,9 @@ class ListMutations {
     if (!board) {
       throw new Error("Không tìm thấy bảng");
     }
-
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
     const lists = await ListModel.find({
       _id: { $in: board.lists },
       status: "Active",
@@ -35,6 +38,14 @@ class ListMutations {
     const user = await auth(context.token);
     const idBoard = args.idBoard;
     const label = args.label;
+
+    const board = await BoardModel.findById(idBoard).catch((err) => {
+      throw new Error(err);
+    });
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
+
     const newList = new ListModel({
       board: idBoard,
       label: label,
@@ -63,7 +74,10 @@ class ListMutations {
           idBoard,
           "List"
         );
-        pubSub.publish(idBoard, { idBoard: idBoard, user: user });
+        pubSub.publish(idBoard + KEY_BOARD_DETAIL, {
+          idBoard: idBoard,
+          user: user,
+        });
       });
 
     return savedList;
@@ -97,7 +111,7 @@ class ListMutations {
           updatedList.board,
           "List"
         );
-        pubSub.publish(updatedList.board, {
+        pubSub.publish(updatedList.board + KEY_BOARD_DETAIL, {
           idBoard: updatedList.board,
           user: user,
         });
@@ -160,7 +174,10 @@ class ListMutations {
           board._id,
           "List"
         );
-        pubSub.publish(board._id, { idBoard: board._id, user: user });
+        pubSub.publish(board._id + KEY_BOARD_DETAIL, {
+          idBoard: board._id,
+          user: user,
+        });
       });
     return true;
   };
@@ -176,6 +193,11 @@ class ListMutations {
       throw new Error("id bảng không được để trống");
     }
 
+    const board = await BoardModel.findById(idBoard);
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
+
     const { oldListIndex, newListIndex } = input;
 
     if (
@@ -188,8 +210,6 @@ class ListMutations {
     ) {
       throw new Error("oldListIndex and newListIndex không hợp lệ");
     }
-
-    const board = await BoardModel.findById(idBoard);
 
     if (!board) {
       throw new Error("Không tìm thấy bảng");
@@ -214,7 +234,10 @@ class ListMutations {
           idBoard,
           "List"
         );
-        pubSub.publish(idBoard, { idBoard: idBoard, user: user });
+        pubSub.publish(idBoard + KEY_BOARD_DETAIL, {
+          idBoard: idBoard,
+          user: user,
+        });
       });
     });
 

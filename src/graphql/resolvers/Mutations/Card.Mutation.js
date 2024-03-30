@@ -5,6 +5,7 @@ const ListModel = require("../../../models/listSchema");
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
 const NotificationModel = require("../../../models/notificationSchema");
+const { KEY_BOARD_DETAIL } = require("../../../constant/common");
 class CardMutations {
   static createCard = async (args, context) => {
     const { pubSub } = context;
@@ -20,6 +21,10 @@ class CardMutations {
       checkLists,
     } = args.input;
     const list = await ListModel.findById(idList);
+    const board = await BoardModel.findById(list.board);
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
     const newCard = new CardModel({
       boardId: list.board,
       title: title,
@@ -53,7 +58,10 @@ class CardMutations {
         savedCard._id,
         "Card"
       );
-      pubSub.publish(board._id, { idBoard: board._id, user: user });
+      pubSub.publish(board._id + KEY_BOARD_DETAIL, {
+        idBoard: board._id,
+        user: user,
+      });
     });
 
     return savedCard;
@@ -81,6 +89,14 @@ class CardMutations {
     const user = await auth(context.token);
     const input = args.input;
     const cardId = input.idCard;
+    const card = await CardModel.findById(cardId);
+    if (!card) {
+      throw new Error("Không tìm thấy card này");
+    }
+    const board = await BoardModel.findById(card.boardId);
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
+    }
     const checkListIds = input.checkLists
       ? await this.saveCheckLists(cardId, input.checkLists)
       : null;
@@ -119,7 +135,10 @@ class CardMutations {
         updateCard._id,
         "Card"
       );
-      pubSub.publish(board._id, { idBoard: board._id, user: user });
+      pubSub.publish(board._id + KEY_BOARD_DETAIL, {
+        idBoard: board._id,
+        user: user,
+      });
     });
     return updateCard;
   };
@@ -134,6 +153,11 @@ class CardMutations {
 
     if (!list) {
       throw new Error("Không tìm thấy thẻ này trong danh sách");
+    }
+    const board = await BoardModel.findById(list.board);
+
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
     }
 
     const cardUpdate = await CardModel.findOneAndUpdate(
@@ -163,7 +187,10 @@ class CardMutations {
         cardId,
         "Card"
       );
-      pubSub.publish(board._id, { idBoard: board._id, user: user });
+      pubSub.publish(board._id + KEY_BOARD_DETAIL, {
+        idBoard: board._id,
+        user: user,
+      });
     });
     return true;
   };
@@ -174,9 +201,12 @@ class CardMutations {
 
     const idBoard = args.idBoard;
     const input = args.input;
-
     if (!idBoard || !input) {
       throw new Error("idBoard không được để trống");
+    }
+    const board = await BoardModel.findById(idBoard);
+    if (board.status !== "Active") {
+      throw new Error("Bảng đã bị đóng");
     }
 
     const { oldItemIndex, oldListIndex, newItemIndex, newListIndex } = input;
@@ -197,8 +227,6 @@ class CardMutations {
     ) {
       throw new Error("Input không hợp lệ");
     }
-
-    const board = await BoardModel.findById(idBoard);
 
     if (!board) {
       throw new Error("Không tìm thấy bảng này");
@@ -243,7 +271,10 @@ class CardMutations {
         card._id,
         "Card"
       );
-      pubSub.publish(board._id, { idBoard: board._id, user: user });
+      pubSub.publish(board._id + KEY_BOARD_DETAIL, {
+        idBoard: board._id,
+        user: user,
+      });
     });
 
     return true;

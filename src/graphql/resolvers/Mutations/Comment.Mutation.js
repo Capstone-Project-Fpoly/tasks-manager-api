@@ -1,4 +1,5 @@
 const auth = require("../../../auth/authorization");
+const { KEY_BOARD_DETAIL } = require("../../../constant/common");
 const CardModel = require("../../../models/cardShema");
 const CommentModel = require("../../../models/commentSchema");
 const NotificationModel = require("../../../models/notificationSchema");
@@ -32,7 +33,10 @@ class CommentMutation {
       card.id,
       "Comment"
     );
-    pubSub.publish(card.boardId, { idBoard: card.boardId, user: user });
+    pubSub.publish(card.boardId + KEY_BOARD_DETAIL, {
+      idBoard: card.boardId,
+      user: user,
+    });
     return savedComment;
   }
 
