@@ -190,7 +190,7 @@ class AdminController {
       return res.status(400).json({ message: "Người dùng không tồn tại." });
     }
 
-    userRecord.isBanned = true;
+    userRecord.isBanned = !userRecord.isBanned;
     await userRecord.save();
 
     res.json({ message: "Khóa người dùng thành công." });
