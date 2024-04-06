@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String },
   fullName: { type: String },
   passWord: { type: String },
-  role: { type: String, enum: ["admin", "user"] },
+  role: { type: String, enum: ["admin", "user"], default: "user" },
+  isBanned: { type: Boolean, default: false },
 });
 
 const UserModel = mongoose.model("users", userSchema);
