@@ -11,6 +11,7 @@ const loginByEmail = async (args, context) => {
     const uid = decodedToken.user_id;
     const findUser = await UserModel.findOne({ uid });
     if (!findUser) throw new Error("Đăng nhập thất bại hoặc sai mật khẩu!");
+    if (findUser.isBanned) throw new Error("Tài khoản của bạn đã bị khóa!");
     const jwtToken = jwt.sign({ uid }, process.env.KEY);
     authDeviceId(uid, jwtToken, deviceId);
     return jwtToken;

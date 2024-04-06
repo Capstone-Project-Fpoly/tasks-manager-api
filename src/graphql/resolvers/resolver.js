@@ -13,6 +13,7 @@ const {
   openBoard,
   deleteBoard,
   checkBoard,
+  getBoardsClosed,
 } = require("./Mutations/Board.Mutations");
 const loginByEMail = require("./login/loginByEmail");
 const registerByEmail = require("./login/registerByEmail");
@@ -120,6 +121,7 @@ const resolvers = {
     openBoard: (_, args, context) => openBoard(args, context),
     deleteBoard: (_, args, context) => deleteBoard(args, context),
     checkBoard: (_, args, context) => checkBoard(args, context),
+    getBoardsClosed: (_, args, context) => getBoardsClosed(args, context),
   },
   Subscription: {
     test: {

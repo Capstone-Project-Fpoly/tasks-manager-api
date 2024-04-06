@@ -344,6 +344,15 @@ class BoardMutations {
     if (board.status !== "Active") return false;
     return true;
   };
+
+  static getBoardsClosed = async (args, context) => {
+    const user = await auth(context.token);
+    const boards = await BoardModel.find({
+      ownerUser: user.uid,
+      status: "Archived",
+    });
+    return boards;
+  };
 }
 
 module.exports = BoardMutations;

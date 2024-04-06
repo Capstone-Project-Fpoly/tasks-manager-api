@@ -19,6 +19,10 @@ const auth = async (token) => {
     throw new Error("Không tìm thấy người dùng");
   }
 
+  if (user.isBanned) {
+    throw new Error("Tài khoản của bạn đã bị khóa!");
+  }
+
   return user;
 };
 

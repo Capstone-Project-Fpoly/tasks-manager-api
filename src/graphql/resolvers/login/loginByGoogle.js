@@ -34,6 +34,7 @@ module.exports = async (parent, args, context) => {
   const currentDate = new Date().toISOString();
   const uid = decodedToken.user_id;
   const findUser = await UserModel.findOne({ uid });
+  if (findUser.isBanned) throw new Error("Tài khoản của bạn đã bị khóa!");
   if (findUser) {
     await linkGoogleWithEmail(decodedToken);
     const jwtToken = jwt.sign({ uid }, process.env.KEY);

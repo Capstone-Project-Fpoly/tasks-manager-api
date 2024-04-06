@@ -106,6 +106,7 @@ type Mutation {
   openBoard(idBoard: String!): Boolean
   deleteBoard(idBoard: String!): Boolean
   checkBoard(idBoard: String!): Boolean
+  getBoardsClosed: [Board]
 }
 
 type ResultMyCards {
