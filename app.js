@@ -54,6 +54,9 @@ const startServer = async () => {
     credential: admin.credential.cert(serviceAccount),
   });
   const app = express();
+  app.use(
+    express.static(__dirname, { type: "text/javascript" }, { type: "text/css" })
+  );
   const httpServer = createServer(app);
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 

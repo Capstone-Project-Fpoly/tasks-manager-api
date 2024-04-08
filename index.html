@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>khoan Admin</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="shortcut icon" href="/assets/image/favicon.png">
 </head>
+
+
 <body>
-    <h1>Hello</h1>
+
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="row w-100 m-0">
+        <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+          <div class="card col-lg-4 mx-auto">
+            <div class="card-body px-5 py-5">
+              <h3 class="card-title text-left mb-3">Login Admin Web</h3>
+              <form action="/login" method="post">
+                <div class="form-group">
+                  <label for="email">Username or email</label>
+                  <input type="text" class="" name="username" id="email">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="" name="password" id="password">
+                </div>
+                <div class="form-group d-flex align-items-center justify-content-between">
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<script src="./assets/js/login.js"></script>
+  
 </body>
+
 </html>

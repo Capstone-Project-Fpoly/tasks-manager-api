@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Khoan Admin</title>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+
+</head>
+
+<body>
+    <div class="container-scroller">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+                <a class="sidebar-brand brand-logo" href="home.html"><img src="../../assets/image/logo.svg"
+                        alt="logo" /></a>
+                <a class="sidebar-brand brand-logo-mini" href="home.html"><img src="../../assets/image/logo-mini.svg"
+                        alt="logo" /></a>
+            </div>
+            <ul class="nav">
+                <li class="nav-item profile">
+                    <div class="profile-desc">
+                        <div class="profile-pic">
+                            <div class="count-indicator">
+                                <img class="img-xs rounded-circle " src="../../assets/image/image_user/face1.jpg"
+                                    alt="">
+                                <span class="count bg-success"></span>
+                            </div>
+                            <div class="profile-name">
+                                <h5 class="mb-0 font-weight-normal">Khoan handsome</h5>
+                                <span>Gold Member</span>
+                            </div>
+                        </div>
+                        <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i
+                                class="mdi mdi-dots-vertical"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
+                            aria-labelledby="profile-dropdown">
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-settings text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">Cài đặt tài khoản</p>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-onepassword  text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">Đổi mật khẩu</p>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-calendar-today text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">Việc cần làm</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#user-management" aria-expanded="false"
+                        aria-controls="user-management">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-account-group"></i>
+                        </span>
+                        <span class="menu-title">Quản lý người dùng</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="user-management">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="./taoTk_user.html">Tạo tài khoản người
+                                    dùng</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="./danhsachUser.html">Danh sách người
+                                    dùng</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+        
+
+
+             
+            </ul>
+        </nav>
+
+        <div class="container-fluid page-body-wrapper">
+
+            <nav class="navbar p-0 fixed-top d-flex flex-row">
+                <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+                    <a class="navbar-brand brand-logo-mini" href="index.html">Woang Itachi</a>
+                </div>
+                <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button"
+                        data-toggle="minimize">
+                        <span class="mdi mdi-menu"></span>
+                    </button>
+                    <ul class="navbar-nav navbar-nav-right">
+                        <li class="nav-item dropdown d-none d-lg-block">
+                            <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false" href="#">+ Thêm user</a>
+                        </li>
+            
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
+                                <div class="navbar-profile">
+                                    <img class="img-xs rounded-circle" id="avatar_admin">
+                                    <p class="mb-0 d-none d-sm-block navbar-profile-name" id="name_admin"></p>
+                                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                                <a id="logoutButton" class="dropdown-item preview-item">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-logout text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Log out</p>
+                                    </div>
+                                </a>
+                            </div>
+                                                        
+                        </li>
+                    </ul>
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
+                        <span class="mdi mdi-format-line-spacing"></span>
+                    </button>
+                </div>
+            </nav>
+            <div class="userT">
+                <h1 class="tieude">Danh sách Users</h1>
+                <div class="chucnang">
+                    <div class="sortUserT">
+                        <label for="sort"></label>
+                        <select onchange="accending()" id="sort">
+                            <option value="default">--Sort by default--</option>
+                            <option value="az">A - Z</option>
+                            <option value="za">Z - A</option>
+                        </select>
+                    </div>
+                    <div class="searchUsersT">
+                        <label for="search"></label>
+                        <input type="text" id="search" placeholder="search ............." oninput="searchUser()" />
+                    </div>
+                </div>
+                <hr>
+                <div id="usersList" style="margin-top: 50px; align-items: center;"></div>
+                <div id="pagination" class="pagination-container">
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Bản quyền thuộc
+                                khoanCuaCua2003@@</span>
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Mọi chi tiết xin liên
+                                hệ <a href="https://www.facebook.com/khoanKuaKua">Admin Khoandeptrai</a></span>
+                        </div>
+                    </footer>
+                </div>
+              
+            </div>
+            
+
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../../assets/js/vendor.bundle.base.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <script src="../../assets/js/Chart.min.js"></script>
+    <script src="../../assets/js/chart.js"></script>
+    <script src="../../assets/js/loadUser.js"></script>
+
+
+</body>
+
+</html>
