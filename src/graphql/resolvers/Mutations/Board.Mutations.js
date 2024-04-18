@@ -10,6 +10,8 @@ const {
 const sendNotification = require("../Service/sendNotification");
 const auth = require("../../../auth/authorization");
 const { KEY_CLOSE_BOARD } = require("../../../constant/common");
+const NotificationModel = require("../../../models/notificationSchema");
+const LabelCardModel = require("../../../models/labelCardSchema");
 
 const sendNotificationForRemoveUser = async (idBoard, creator, users) => {
   try {
@@ -296,43 +298,35 @@ class BoardMutations {
     const idBoard = args.idBoard;
     const board = await BoardModel.findOne({
       _id: idBoard,
-      ownerUser: user.uid,
     });
     if (!board) {
+      throw new Error("Bảng không tồn tại");
+    }
+    if (board.ownerUser !== user.uid) {
       throw new Error("Bạn không có quyền xóa bảng này");
     }
-    if (board.status === "Deleted") {
-      throw new Error("Bảng này đã bị xóa");
-    }
-    await BoardModel.updateOne({ _id: idBoard }, { status: "Deleted" }).catch(
-      (err) => {
-        throw new Error(err);
-      }
-    );
-    const lists = await ListModel.find({ _id: { $in: board.lists } });
-    let allListIdCards = [];
-    for (const list of lists) {
-      if (list.cards && list.cards.length > 0) {
-        allListIdCards = allListIdCards.concat(list.cards);
-      }
-    }
-    if (allListIdCards.length > 0) {
-      await CardModel.updateMany(
-        { _id: { $in: allListIdCards } },
-        { status: "Deleted" }
-      );
-    }
-    await ListModel.updateMany(
-      { _id: { $in: board.lists } },
-      { status: "Deleted" }
-    );
-    sendNotification(
+    await ListModel.deleteMany({ board: idBoard }).catch((err) => {
+      throw new Error(err);
+    });
+    await CardModel.deleteMany({ boardId: idBoard }).catch((err) => {
+      throw new Error(err);
+    });
+    await NotificationModel.deleteMany({ idBoard: idBoard }).catch((err) => {
+      throw new Error(err);
+    });
+    await LabelCardModel.deleteMany({ board: idBoard }).catch((err) => {
+      throw new Error(err);
+    });
+    await sendNotification(
       idBoard,
       user.uid,
       `**${user.fullName}** đã xóa bảng **${board.title}**`,
       idBoard,
       "Board"
     );
+    await BoardModel.deleteOne({ _id: idBoard }).catch((err) => {
+      throw new Error(err);
+    });
     pubSub.publish(idBoard + KEY_CLOSE_BOARD, { isClose: true, user: user });
     return true;
   };
@@ -340,7 +334,7 @@ class BoardMutations {
     const user = await auth(context.token);
     const idBoard = args.idBoard;
     const board = await BoardModel.findOne({ _id: idBoard });
-    if (!board) return false;
+    if (!board) return null;
     if (board.status !== "Active") return false;
     return true;
   };
