@@ -1,14 +1,10 @@
-//  import dotenv from "dotenv";
-//  dotenv.config();
+
 function validateEmail(email) {
-  var re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 function saveTokenToLocalStorage(token) {
-  // Kiểm tra xem trình duyệt có hỗ trợ Local Storage không
-  if (typeof Storage !== "undefined") {
-    // Sử dụng phương thức setItem để lưu token vào Local Storage với một key cụ thể
+  if (typeof (Storage) !== "undefined") {
     localStorage.setItem("token", token);
     console.log("Token đã được lưu vào Local Storage.");
   } else {
@@ -16,44 +12,84 @@ function saveTokenToLocalStorage(token) {
   }
 }
 
-document.querySelector("form").addEventListener("submit", function (e) {
-  e.preventDefault(); // Ngăn chặn form gửi theo cách truyền thống
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault(); 
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const URL = "https://tasks-manager-api-pi.vercel.app";
+
   if (!validateEmail(email)) {
-    alert("Vui lòng nhập đúng định dạng email.");
+    showSuccessMessageFail();
     return;
-  } else {
-    document.querySelector("form").addEventListener("submit", function (e) {
-      e.preventDefault(); // Ngăn chặn form gửi theo cách truyền thống
-      const username = document.querySelector('[name="username"]').value;
-      const password = document.querySelector('[name="password"]').value;
-      fetch(`/admin/login`, {
-        method: "POST",
-        headers: {
-          // 'Authorization': 'Bearer token',
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: username, password }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          const token = data.token;
-          if (!token) {
-            const message = data.message;
-            console.log(message);
-            // lỗi khi sai
-            return;
-          }
-          saveTokenToLocalStorage(token);
-          window.location.replace("../view/home/danhsachUser.html");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    });
   }
+
+  fetch(`${URL}/admin/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then(data => {
+      const token = data.token;
+      if (!token) {
+        const message = data.message;
+        console.log(message);
+        return;
+      }
+      saveTokenToLocalStorage(token);
+      showSuccessMessage();
+      setTimeout(() => {
+        window.location.replace('../view/home/danhsachUser.html');
+      }, 2000);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 });
+
+function showSuccessMessage() {
+  const messageDiv = document.createElement('div');
+  messageDiv.innerHTML = `
+  <div class="success-message">
+<div class="checkmark-container">
+  <span class="checkmark">&#10003;</span>
+</div>
+<strong>Đăng nhập thành công !</strong>
+<div class="progress-bar1"></div>
+</div>
+  `;
+  document.body.appendChild(messageDiv);
+  
+  setTimeout(function() {
+    messageDiv.remove();
+  }, 3000);
+}
+
+
+function showSuccessMessageFail() {
+  const messageDiv = document.createElement('div');
+  messageDiv.innerHTML = `
+  <div class="success-message1">
+<div class="checkmark-container1">
+  <span class="checkmark1">x</span>
+</div>
+<strong>Đăng nhập thất bại. Vui lòng kiểm tra lại</strong>
+<div class="progress-bar2"></div>
+</div>
+  `;
+  document.body.appendChild(messageDiv);
+  
+  setTimeout(function() {
+    messageDiv.remove();
+  }, 2000);
+}
+
+
+
+
+
