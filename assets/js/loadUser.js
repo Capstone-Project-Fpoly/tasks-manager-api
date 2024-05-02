@@ -118,7 +118,7 @@ function renderUser(users) {
   <th class="column-createdAt">CreatedAt</th>
   <th class="column-updatedAt">UpdatedAt</th>
   <th class="column-role">Role</th>
-  <th class="column-isBanned">IsBanned</th>
+ 
 </tr>`;
   perUser.forEach((value) => {
       const formattedCreatedAt = formatDate(value.createdAt);
@@ -131,7 +131,7 @@ function renderUser(users) {
   <td>${formattedCreatedAt}</td>
   <td>${formattedUpdatedAt}</td>
   <td>${value.role}</td>
-  <td>${value.isBanned ? 'True' : 'False'}</td>
+ 
 
 </tr>`;
   });
