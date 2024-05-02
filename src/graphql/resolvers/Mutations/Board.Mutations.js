@@ -336,6 +336,7 @@ class BoardMutations {
     const board = await BoardModel.findOne({ _id: idBoard });
     if (!board) return null;
     if (board.status !== "Active") return false;
+    if (!board.users.includes(user.uid)) return null;
     return true;
   };
 
